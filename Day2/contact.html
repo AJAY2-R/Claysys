@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Contact</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        .container {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 49.5vh;
+            }
+            form{
+                padding: 10px;
+            }
+            .rform-input-max{
+                padding:10px;
+            }
+        .rform-input-max textarea{
+            width: 96%;
+            
+            border-radius: 10px;
+            border :1px solid gray;
+        }
+        .rform-input-max input{
+                width: 96%;
+                height: 30px;
+                border-radius: 10px;
+                padding: 5px;
+                padding-left: 5px;
+                border :1px solid gray;
+            }
+            .form-submit-min{
+                background:linear-gradient(326deg, rgba(73,227,159,1) 53%, rgba(0,212,255,1) 100%);
+                border-radius:20px;
+                border:none;
+                color: white;
+                font-family: Calibri, sans-serif;
+                width: 96%;
+                height: 35px;
+                font-size: larger;
+                font-weight: bold;
+                align-self: center  ;
+        }
+        .active{
+                color:green;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="index.html"><img src="images/logo.png" alt="Logo" ></a>
+            <ul>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html" >Registration</a></li>
+                <li><a href="contact.html" class="active" >Contact Us</a></li>
+                <li><a href="about.html">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h1 class="heading-text">How can we help you?</h1>
+    <div class="container" >
+                <form style="width: 40%;">
+                    <div class="rform-input-max">
+                        <input type="text" name="fname" placeholder="First Name" required>
+                    </div>
+                    <div class="rform-input-max">
+                        <input type="text" name="lname" placeholder="Last Name" required>
+                    </div>
+                    <div class="rform-input-max">
+                        <input type="text" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="rform-input-max">
+                        <label for="address" style="color:gray;font-size: medium;">Message</label><br>
+                        <textarea  id="address" rows="10">
+    
+                        </textarea>
+                    </div>
+                    <input type="submit" value="Submit" style="text-align: center;color:green;" class="form-submit-min">
+                </form>
+    </div>
+    <br>
+    <footer>
+        <div class="contact-info">
+            <h2>Contact Information</h2>
+            <p>AJAY RAMESH</p>
+            <p> +1 123456789</p>
+            <p>ajay @gmail.com</p>
+            <p>Kochi, Kerala </p>
+        </div>
+        </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2023 Fruits-shop. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

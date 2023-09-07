@@ -1,0 +1,76 @@
+body{
+    background-color: aliceblue;
+}
+
+.container-2 {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login,.register{
+    border-radius: 20px;
+    left: 120px;
+    box-shadow: 0 5px 10px rgb(58, 58, 58);  
+    background-color: white;
+}
+
+label{
+    font-family: Arial,Sanas;
+    font-size: small;
+    color:rgb(67, 66, 66)
+}
+
+
+header{
+    background:linear-gradient(326deg, rgba(73,227,159,1) 53%, rgba(0,212,255,1) 100%);
+    color: white;
+    padding: 10px ;
+    border-radius: 10px 10px 0px 0px;
+}
+nav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+nav ul li{
+    margin-left: 20px;
+}
+nav ul li a{
+    font-family: Arial,Sanas;
+    font-weight: bold;
+    text-decoration: none;
+    color:white;
+}
+nav ul li a:hover{
+    color:rgb(95, 94, 92);
+}
+nav img{
+    height: 50px;
+    width:auto;
+}
+
+.heading-text{
+    text-align: center;
+    font-family:Arial,Sans;
+    color:rgb(56, 56, 56);
+}
+footer{
+    font-family: Arial,Sanas;
+    text-align: center;
+    background-color: rgb(42, 41, 41);
+    color: white;
+}
+footer .contact-info p{
+    text-align: center;
+}
+.social-icons i{
+    color:white;
+}
