@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel = "icon" href="images/logo2.png" type = "image/x-icon">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="index.html"><img src="images/logo.png" alt="Logo"></a>
+            <ul>
+                <li><a href="./index.html" >Home</a></li>
+                <li><a href="login.html" class="active">Sign in</a></li>
+                <li><a href="signup.html">Sign up</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.html">About us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="login" style="width:400px">
+            <div class="form-head" align="center">
+                <p>Sign In</p>
+            </div>
+            <form onsubmit="return validateLoginForm()">
+                <div class="form-input">
+                    <input type="text" name="email" id="email" placeholder="Email Address"
+                        onfocusout="validateEmail(this)">
+                    <span id="error-email" class="error-msg"></span>
+                </div>
+                <div class="form-input">
+                    <input type="password" name="password" id="password" placeholder="Password"
+                        onfocusout="validatePass(this)">
+                    <span id="error-password" class="error-msg"></span>
+                </div>
+                <div class="form-control" align="center">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember Me</label> &nbsp;
+                    <a href="#" style="text-decoration: none;">Forgot Password?</a>
+                </div>
+                <input type="submit" value="Login" class="form-submit">
+            </form>
+            <div class="act-link">
+                <p align="center">Not a member? <a href="signup.html" style="text-decoration:none">Signup now</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="contact-info">
+        <h2>Contact Information</h2>
+        <p>AJAY RAMESH</p>
+        <p> +91 123456789</p>
+        <p>ajay @gmail.com</p>
+        <p>Kochi, Kerala </p>
+    </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <div class="social-icons">
+        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>&copy; 2023 Fruits-shop. All rights reserved.</p>
+</footer>
+</body>
+</html>

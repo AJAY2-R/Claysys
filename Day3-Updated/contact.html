@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Contact</title>
+    <link rel = "icon" href="images/logo2.png" type = "image/x-icon">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="./index.html"><img src="images/logo.png" alt="Logo" ></a>
+            <ul>
+                <li><a href="./index.html" >Home</a></li>
+                <li><a href="login.html">Sign in</a></li>
+                <li><a href="signup.html">Sign up</a></li>
+                <li><a href="contact.html" class="active" >Contact</a></li>
+                <li><a href="about.html">About us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="bg-image2">
+    <h1 class="heading-text">How can we help you?</h1></div>
+    <div class="container" style="display: block; position: relative; text-align: center;">
+        <form style="width: 40%; display: inline-block; text-align: left;" onsubmit="return validateContactForm()">    
+                    <div class="rform-input-max" >
+                        <input type="text" name="fname" placeholder="First name" id="fname" onfocusout="validateFname(this)">
+                        <span id="error-fname" class="error-msg"></span>
+                    </div>
+                    <div class="rform-input-max">
+                        <input type="text" name="lname" placeholder="Last name" id="lname" onfocusout="validateLname(this)">
+                        <span id="error-lname" class="error-msg"></span>
+                    </div>
+                    <div class="rform-input-max">
+                        <input type="number" name="phone" id=phone placeholder="Phone number"
+                            onfocusout="validatePhone(this)">
+                        <span id="error-phone" class="error-msg"></span>
+                    </div>
+                    <div class="rform-input-max">
+                        <input type="text" name="email" placeholder="Email address" id="email" onfocusout="validateEmail(this)" >
+                        <span id="error-email" class="error-msg"></span>
+                    </div>
+                    <div class="rform-input-max">
+                        <label for="message" style="color:gray;font-size: medium;">Message</label><br>
+                        <textarea  id="message" rows="10" onfocusout="validateMessage(this)">
+    
+                        </textarea>
+                        <span id="error-message" class="error-msg"></span>
+                    </div>
+                    <center><input type="submit"  type="Submit" style="text-align: center;color:green;" class="form-submit-min" ></center>
+                </form>
+    </div>
+    <br>
+    <footer style="margin-top:10%;">
+        <div class="contact-info">
+            <h2>Contact Information</h2>
+            <p>AJAY RAMESH</p>
+            <p> +1 123456789</p>
+            <p>ajay @gmail.com</p>
+            <p>Kochi, Kerala </p>
+        </div>
+        </div>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p>&copy; 2023 Fruits-shop. All rights reserved.</p>
+    </footer>
+</body>
+
+</script>
+</html>

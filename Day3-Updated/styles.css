@@ -1,0 +1,359 @@
+body{
+    background-color: aliceblue;
+}
+.bg-image {
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center; 
+    height: 300px;
+  }
+.bg-image2 {
+    background-size: cover;
+    position: relative;
+    height: 300px; 
+  }
+  
+  .bg-image2::before {
+    content: "";
+    background-size: cover;
+    background-image: url('images/background-2.jpg');
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    filter: brightness(50%);
+  }
+  
+.container-2 {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login,.register{
+    border-radius: 20px;
+    left: 120px;
+    box-shadow: 0 5px 10px rgb(58, 58, 58);  
+    background-color: white;
+}
+
+label{
+    font-family: Arial,Sanas;
+    font-size: small;
+    color:rgb(67, 66, 66)
+}
+
+.heading-text {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family:Arial,Sans;
+    color: white;
+    font-size: 30px;
+  }
+
+header{
+    background:linear-gradient(326deg, rgba(73,227,159,1) 53%, rgba(0,212,255,1) 100%);
+    color: white;
+    padding: 10px ;
+    border-radius: 10px 10px 0px 0px;
+}
+nav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+nav ul li{
+    margin-left: 20px;
+}
+nav ul li a{
+    font-family: Arial,Sanas;
+    font-weight: bold;
+    text-decoration: none;
+    color:white;
+}
+nav ul li a:hover{
+    color:rgb(95, 94, 92);
+}
+nav img{
+    height: 50px;
+    width:auto;
+}
+
+footer{
+    font-family: Arial,Sanas;
+    text-align: center;
+    background-color: rgb(42, 41, 41);
+    color: white;
+}
+footer .contact-info p{
+    text-align: center;
+}
+.social-icons i{
+    color:white;
+}
+
+body{
+    background-color: aliceblue;
+}
+.container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 49.5vh;
+}   
+header{
+    background:linear-gradient(326deg, rgba(73,227,159,1) 53%, rgba(0,212,255,1) 100%);
+    color: white;
+    padding: 10px ;
+    border-radius: 10px 10px 0px 0px;
+}
+.slider {
+    border-radius: 10px;
+    display: flex;
+    margin-top: 20px;
+    position: relative; 
+    overflow: hidden;
+}
+
+.slide 
+{
+    width: 100%;height: 100%;
+}
+
+.fade {
+animation-name: fade;
+animation-duration: 2s;
+}
+
+@keyframes fade {
+from {opacity: .4} 
+to {opacity: 1}
+}
+img{
+    width: 100%;
+    height: 679px;
+    object-fit: cover;
+}
+.logo{
+    
+    filter: drop-shadow(0px 0px 10px  rgb(231, 231, 57));
+}
+.about-text{
+    padding: 20px;
+    font-family: Arial,Sanas;
+    text-align: justify;color: rgb(56, 56, 56);
+}
+a.active{
+    color:green;
+}
+
+form {
+    padding: 10px;
+}
+.container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 49.5vh;
+}
+
+form {
+    padding: 10px;
+}
+
+.form-head {
+    height: 50px;
+    padding: 10px;
+    border-radius: 20px 20px 0px 0px;
+    background: linear-gradient(326deg, rgba(73, 227, 159, 1) 53%, rgba(0, 212, 255, 1) 100%);
+    font-family: Arial, sans-serif;
+    font-size: larger;
+    font-weight: bold;
+    color: white;
+}
+.rform-input-max textarea{
+    width: 100%;
+    
+    border-radius: 10px;
+    border :1px solid gray;
+}
+.form-submit-min{
+    background:linear-gradient(326deg, rgba(73,227,159,1) 53%, rgba(0,212,255,1) 100%);
+    border-radius:20px;
+    border:none;
+    color: white;
+    font-family: Calibri, sans-serif;
+    width: 96%;
+    height: 35px;
+    font-size: larger;
+    font-weight: bold;
+    align-self: center  ;
+}
+.rform-input-max input{
+    width: 96%;
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 5px;
+    border :1px solid gray;
+}
+.form-input {
+    width: 92%;
+    padding: 10px;
+    margin-right: 10%;
+}
+
+.form-input input {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid gray;
+}
+
+.form-control {
+    padding: 10px;
+    padding-bottom: 20px;
+    font-family: Arial, sans-serif;
+    font-size: small;
+}
+
+.form-control a {
+    text-decoration: none;
+}
+
+.act-link {
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.form-submit {
+    background: linear-gradient(326deg, rgba(73, 227, 159, 1) 53%, rgba(0, 212, 255, 1) 100%);
+    border-radius: 20px;
+    border: none;
+    color: white;
+    font-family: Calibri, sans-serif;
+    width: 100%;
+    height: 35px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.form-head {
+    height: 50px;
+    padding: 10px;
+    border-radius: 20px 20px 0px 0px;
+    background: linear-gradient(326deg, rgba(73, 227, 159, 1) 53%, rgba(0, 212, 255, 1) 100%);
+    font-family: Arial, sans-serif;
+    font-size: larger;
+    font-weight: bold;
+    color: white;
+}
+
+.form-submit {
+    background: linear-gradient(326deg, rgba(73, 227, 159, 1) 53%, rgba(0, 212, 255, 1) 100%);
+    border-radius: 20px;
+    border: none;
+    color: white;
+    font-family: Calibri, sans-serif;
+    width: 100%;
+    height: 35px;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.rform-input,
+.rform-input-max {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.rform-input input {
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 5px;
+    border: 1px solid gray;
+}
+
+.rform-input-max input {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 5px;
+    border: 1px solid gray;
+}
+
+select {
+    width: 49%;
+    height: 40px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 5px;
+    border: 1px solid gray;
+    font-size: 15px;
+}
+
+.rform-input-sele {
+    display: inline-block;
+    padding: 10px;
+    font-family: Arial, Sanas;
+}
+
+.error-msg {
+    color: red;
+    font-size: small;
+    font-family: Arial, Sanas;
+    display: block;
+}
+
+.pass-strength {
+height: 5px;
+width: 100%;
+border-radius: 10px;
+}
+
+.pass-strength span {
+display: block;
+height: 100%;
+}
+
+.pass-strength span.weak {
+width: 25%;
+background: red;
+border-radius: 10px;
+}
+
+.pass-strength span.better {
+width: 50%;
+background: orange;
+border-radius: 10px;
+}
+
+.pass-strength span.medium {
+width: 75%;
+background: yellow;
+border-radius: 10px;
+}
+
+.pass-strength span.strong {
+width: 100%;
+background: green;
+border-radius: 10px;
+}
+#age{
+    font-family: Arial, Helvetica, sans-serif;
+}

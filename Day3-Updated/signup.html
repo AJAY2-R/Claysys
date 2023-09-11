@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel = "icon" href="images/logo2.png" type = "image/x-icon">
+    <script src="script.js"></script>
+    <style>
+       
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="./index.html"><img src="images/logo.png" alt="Logo"></a>
+            <ul>
+                <li><a href="./index.html" >Home</a></li>
+                <li><a href="login.html">Sign in</a></li>
+                <li><a href="signup.html" class="active" >Sign up</a></li>
+                <li><a href="contact.html">Contact </a></li>
+                <li><a href="about.html">About us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container-2">
+        <div class="register" style="width: 560px !important">
+            <div class="form-head" align="center">
+                <p>Sign up</p>
+            </div>
+            <form  width="50%">
+                <div class="rform-input-max">
+
+                    <input type="text" name="fname" id="fname" placeholder="First name"
+                        onfocusout="validateFname(this)" required>
+                    <span id="error-fname" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <input type="text" name="lname" id="lname" placeholder="Last name" onfocusout="validateLname(this)" required>
+                    <span id="error-lname" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <label for="dob">Date of birth</label><br>
+                    <input type="date" name="dob" id="dob" required onblur="calcAge(this)">
+                    <span id="age"> </span>
+                    <span id="error-date" class="error-msg"></span>
+                </div>
+                <div class="rform-input-sele">
+                    <label>Gender</label><br>
+                     <input type="radio" name="gender" id="male" value="male" onchange="validateGender()">Male
+                     <input type="radio" name="gender" id="female" value="female" onchange="validateGender()">Female
+                     <input type="radio" name="gender" id="other" value="other" onchange="validateGender()">Other
+                    <span id="error-gender" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <input type="number" name="phone" id=phone placeholder="Phone number"
+                        onfocusout="validatePhone(this)">
+                    <span id="error-phone" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <input type="text" name="email" id="email" placeholder="Email address" required
+                        onfocusout="validateEmail(this)">
+                    <span id="error-email" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <label for="address">Address</label><br>
+                    <textarea id="address" style="width: 100%;border-radius: 10px;border :1px solid gray;"
+                        onfocusout="validateAddress(this)">
+                    </textarea>
+                    <span id="error-address" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max" align="center">
+                    <select name="state" id="state" class="sele" onchange="updateCity()" onfocusout="validateStateCity()">
+                        <option>Select a state</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="TamilNadu">TamilNadu</option>
+                        <option value="Karnadaka">Karnadaka</option>
+                    </select>
+                    <select name="city" id="city" class="sele">
+                        <option>Select a city</option>
+                    </select>
+                    <span id="error-state" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <input type="text" name="usename" id="username" placeholder="Usename" onfocusout="validateUsername(this)" required>
+                    <span id="error-username" class="error-msg"></span>
+                </div>
+                <div class="rform-input-max">
+                    <input type="password" name="password" id="password" placeholder="Password" onkeyup="validatePass(this)" onfocusout="validatePass(this)"required>
+                    <span id="error-password" class="error-msg"></span>
+                    <div class="pass-strength" id="password-strength"></div>
+                </div>
+                <div class="rform-input-max">
+                    <input type="password" name="cpassword" id="cpassword" placeholder="Confirm password" onfocusout="validateCpass(this)" required>
+                    <span id="error-cpassword" class="error-msg"></span>
+                </div>
+                <input type="submit" value="Register" class="form-submit" onclick="return validateSignupForm();">
+            </form>
+            <div class="act-link" style="font-family: Arial,Sanas;">
+                <p align="center">Are You A Member? <a href="login.html" style="text-decoration: none;">Login </a></p>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="contact-info">
+        <h2>Contact Information</h2>
+        <p>AJAY RAMESH</p>
+        <p> +1 123456789</p>
+        <p>ajay @gmail.com</p>
+        <p>Kochi, Kerala </p>
+    </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <div class="social-icons">
+        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>&copy; 2023 Fruits-shop. All rights reserved.</p>
+</footer>
+<script>
+  const datepicker = document.getElementById('dob');
+  disableFutureDates(dob);
+
+</script>
+
+</html>
