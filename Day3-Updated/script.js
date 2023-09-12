@@ -108,6 +108,7 @@ function calcAge(date) {
             age--;
         }
         if (age < 18) {
+            document.getElementById('age').innerHTML = age + " Years old";
             er.textContent = "You must be at least 18 years old";
             date.style.border = "1px solid red";
             return false;
