@@ -91,15 +91,14 @@ function disableFutureDates(dateElement) {
   }
 
 //calculate the age 
-function calcAge(dob) {
+function calcAge(date) {
     let er = document.getElementById('error-date');
-    if (dob.value == '') {
-        er.textContent = "Please select the date"
-       dob.style.border = "1px solid red "
-        return false
-    }
-    else {
-        var dob = new Date(dob.value);
+    if (date.value === '') {
+        er.textContent = "Please select the date";
+        date.style.border = "1px solid red";
+        return false;
+    } else {
+        var dob = new Date(date.value);
         var today = new Date();
         var age = today.getFullYear() - dob.getFullYear();
         if (
@@ -108,17 +107,16 @@ function calcAge(dob) {
         ) {
             age--;
         }
-        if (age<=18){
-           er.textContent = "You must be at least 18 years old"
-           dob.style.border = "1px solid red "
-            return false
+        if (age < 18) {
+            er.textContent = "You must be at least 18 years old";
+            date.style.border = "1px solid red";
+            return false;
+        } else {
+            document.getElementById('age').innerHTML = age + " Years old";
+            date.style.border = "1px solid gray";
+            er.textContent = '';
+            return true;
         }
-         else{
-        document.getElementById('age').innerHTML = age+" Years old";
-        dob.style.border = "1px solid gray "
-        er.textContent = ''
-        return true
-         }
     }
 }
 function validateGender() {
