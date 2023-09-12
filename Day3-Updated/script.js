@@ -113,7 +113,7 @@ function calcAge(dob) {
            dob.style.border = "1px solid red "
             return false
         }
- 
+         else{
         document.getElementById('age').innerHTML = age+" Years old";
         dob.style.border = "1px solid gray "
         er.textContent = ''
