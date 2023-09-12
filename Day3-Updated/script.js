@@ -118,6 +118,7 @@ function calcAge(dob) {
         dob.style.border = "1px solid gray "
         er.textContent = ''
         return true
+         }
     }
 }
 function validateGender() {
