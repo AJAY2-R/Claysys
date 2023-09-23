@@ -1,0 +1,102 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    min-height: 81.8vh;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+.navbar {
+background-color: #333;
+color: #fff;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 20px;
+}
+
+.logo a {
+text-decoration: none;
+font-size: 24px;
+font-weight: bold;
+color: #fff;
+}
+
+.nav-links {
+margin-top:20px;
+list-style: none;
+display: flex;
+}
+
+.nav-links li {
+    margin-right: 20px;
+}
+
+.nav-links li:last-child {
+    margin-right: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    border-bottom: 2px solid #fff;
+    border-bottom-color:#ffd800;
+}
+footer {
+    width: 100%;
+    height: 5%;
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    bottom: 0;
+}
+.heading{
+    text-align:center;
+}
+.link-edit {
+    height: 10%;
+    background-color: #284b63;
+    border-radius: 10px;
+    text-align: center;
+}
+.link-edit a {
+    
+    text-decoration: none;
+    color: #1dd3b0;
+}
+.link-delete {
+    height: 10%;
+    background-color: #a4161a;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.link-delete a {
+    text-decoration: none;
+    color: #fff;
+}
+.grid-box{
+    display:inline;
+}
+.view-btn{
+    display:flex;
+    justify-content:flex-end;
+}

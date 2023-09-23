@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Student Details";
+}
+@model StudentMVC.Models.StudentModel
+
+<div>
+    <h4 class="heading">Student Details</h4>
+    <hr />
+    <div class="card" style="width: 18rem; margin: 0 auto;">
+        <img src="data:jpg/image;base64,@Model.ImageBase64" alt="Student Image" height="250px" />
+        <div class="card-body" >
+            <h5 class="card-title" align="center">@Model.FirstName @Model.LastName</h5>
+            <p>Student Id: @Model.StudentId</p>
+            <p>Date of Birth: @Html.DisplayFor(model => model.DateOfBirth)</p>
+            <p>Address: @Html.DisplayFor(model => model.Address)</p>
+            <p>Email id: @Html.DisplayFor(model => model.Email)</p>
+
+            <p class="link-edit">@Html.ActionLink("Edit", "UpdateStudent", new { id = Model.StudentId })</p>
+            <p class="link-delete">@Html.ActionLink("Delete", "DeleteStudent", new { id = Model.StudentId }, new { onclick = "return confirm('Are you sure you want to delete this student?');" })</p>
+        </div>
+    </div>
+
+</div>
+

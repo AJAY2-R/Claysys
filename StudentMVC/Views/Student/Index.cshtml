@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <script>
+    alert('@Html.Raw(ViewBag.Message)');
+    </script>
+}
+<h2>Index</h2>
+
+@Html.ActionLink("Students List", "StudentsDetails");
+

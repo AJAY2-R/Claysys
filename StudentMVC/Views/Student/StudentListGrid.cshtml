@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "StudentList";
+}
+<h1>Student-List</h1>
+<p>
+    @Html.ActionLink("Create New", "AddStudent", "Student", null, new { @class = "btn btn-primary" })
+
+</p>
+<div class="view-btn">
+    <a href="@Url.Action("StudentListGrid", "Student")" class="btn btn-link">
+        <i class="fas fa-th-large"></i>
+    </a>
+    <a href="@Url.Action("StudentsDetails", "Student")" class="btn btn-link">
+        <i class="fas fa-th-list"></i>
+    </a>
+
+</div>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <img src="data:jpg/image;base64,@item.ImageBase64" alt="Student Image" height="250px" class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title" align="center">@item.FirstName @item.LastName</h5>
+                        <p>Student Id: @item.StudentId </p>
+                        <p>Date of Birth: @item.DateOfBirth.ToString("dd-MM-yyyy")</p>
+                        <p>Address: @item.Address</p>
+                        <p>Email id: @item.Email</p>
+
+                        <p class="link-edit">@Html.ActionLink("Edit", "UpdateStudent", new { id = item.StudentId })</p>
+                        <p class="link-delete">@Html.ActionLink("Delete", "DeleteStudent", new { id = item.StudentId }, new { onclick = "return confirm('Are you sure you want to delete this student?');" })</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
