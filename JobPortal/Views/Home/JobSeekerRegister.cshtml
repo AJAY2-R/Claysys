@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Claysys job portal";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+    
+}
+<h1>Job seeker registration </h1>
+<div class="container">
+    <form action="/Home/JobSeekerRegister" method="post" enctype="multipart/form-data" onsubmit="return validateRegisterForm()">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="form-group mt-2">
+                <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First name"
+                       onfocusout="validateFname(this)" required>
+                <span id="error-fname" class="error-msg"></span>
+
+            </div>
+            <div class="form-group mt-2">
+                <div class="col-md-5">
+                    <input type="text" name="LastName" id="LastName" placeholder="Last name" class="form-control" onfocusout="validateLname(this)" required>
+                    <span id="error-lname" class="error-msg"></span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <select name="Experience" class="form-control" onchange="updateCity()" onfocusout="validateStateCity()">
+                <option>Experience</option>
+                <option value=0>Fresher</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+            </select>
+        </div>
+        <div class="form-group mt-2">
+            <div class="col-md-5">
+                <label for="dob">Date of birth</label><br>
+                <input type="date" name="BirthDate" id="DateOfBirth" required class="form-control" onblur="calcAge(this)">
+                <span id="age"> </span>
+                <span id="error-date" class="error-msg"></span>
+            </div>
+        </div>
+        <div class="rform-input-sele mt-2">
+            <label>Gender</label><br>
+            <input type="radio" name="Gender" id="male" value="M" onchange="validateGender()">Male
+            <input type="radio" name="Gender" id="female" value="F" onchange="validateGender()">Female
+            <input type="radio" name="Gender" id="other" value="O" onchange="validateGender()">Other
+            <span id="error-gender" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="number" name="PhoneNumber" class="form-control" id="PhoneNumber" placeholder="Phone number"
+                   onfocusout="validatePhone(this)">
+            <span id="error-phone" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="text" name="Email" id="Email" class="form-control" placeholder="Email address" required
+                   onfocusout="validateEmail(this)">
+            <span id="error-email" class="error-msg"></span>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label><br>
+            <input type="text" name="Address" id="Address" class="form-control" onfocusout="validateAddress(this)">
+            <span id="error-address" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <select name="State" id="state" class="form-control" onchange="updateCity()" onfocusout="validateStateCity()">
+                <option>Select a state</option>
+                <option value="Kerala">Kerala</option>
+                <option value="TamilNadu">TamilNadu</option>
+                <option value="Karnadaka">Karnadaka</option>
+            </select>
+            <select name="City" id="city" class="form-control">
+                <option>Select a city</option>
+            </select>
+            <span id="error-state" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="text" name="Username" id="Username" placeholder="Username" class="form-control" onfocusout="validateUsername(this)" required>
+            <span id="error-username" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="password" name="password" id="Password" class="form-control" placeholder="Password" onkeyup="validateCpass(this)" onfocusout="validatePass(this)" required>
+            <span id="error-password" class="error-msg"></span>
+        </div>
+        <div class="form-group mt-2">
+            <input type="password" name="cpassword" id="ConfirmPassword" placeholder="Confirm password" class="form-control" onfocusout="validateCpass(this)" required>
+            <span id="error-cpassword" class="error-msg"></span>
+        </div>
+
+        <div class="form-group mt-2">
+            <label for="imageUpload">Profile picture</label>
+            <input type="file" name="imageUpload" id="imageUpload" class="form-control" accept=".png, .jpg" required>
+            <span class="text-danger">
+            </span>
+        </div>
+
+        <div class="form-group mt-2">
+            <label for="resumeUpload">Resume</label>
+            <input type="file" name="resumeUpload" id="resumeUpload" class="form-control" accept=".pdf" required>
+            <span class="text-danger"> </span>
+        </div>
+
+        <div class="form-group mt-2">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default">
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/MyScripts/script.js"></script>
