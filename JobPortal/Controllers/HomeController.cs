@@ -6,21 +6,40 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace JobPortal.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Index page controler
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
         }
+
+        /// <summary>
+        /// Controller view for Job seeker registration
+        /// </summary>
+        /// <returns></returns>
         public ActionResult JobSeekerRegister()
         {
             ModelState.Clear();
             return View();
         }
+
+        /// <summary>
+        /// Controller for job seeker registration 
+        /// </summary>
+        /// <param name="jobSeeker">Model instance</param>
+        /// <param name="imageUpload">Uploaded profile picture</param>
+        /// <param name="resumeUpload">Uploaded resume</param>
+        /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult JobSeekerRegister(JobSeekerModel jobSeeker, HttpPostedFileBase imageUpload, HttpPostedFileBase resumeUpload)
         {
             if (ModelState.IsValid)
@@ -31,32 +50,49 @@ namespace JobPortal.Controllers
             }
             return View();
         }
+
+        /// <summary>
+        /// About page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult About()
         {
             return View();
         }
-
+        /// <summary>
+        /// Contact Us page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ContactUs()
         {
             return View();
         }
+
+        /// <summary>
+        /// Job seeker login page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult JobSeekerLogin()
         {
             ModelState.Clear();
             return View();
         }
-
+        /// <summary>
+        /// Job seeker login process
+        /// </summary>
+        /// <param name="seeker">Job seeker model instance with Username and password </param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult JobSeekerLogin(FormCollection formCollection)
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult JobSeekerLogin([Bind(Include ="Username,Password")]JobSeekerModel seeker )
         {
-
-            string Username = formCollection["Username"];
-            string Password = formCollection["Password"];
-            JobSeekerRepository seeker = new JobSeekerRepository();
-            int res= seeker.JobSeekerLogin(Username,Password);
-            if (res > 0)
+            JobSeekerRepository repo = new JobSeekerRepository();
+            if (repo.JobSeekerLogin(seeker))
             {
-                Session["Seekerid"] = res;
+                var details = repo.JobSeekers().Find(model=>model.Username == seeker.Username);
+
+                Session["SeekerId"] = details.SeekerId;
                 return RedirectToAction("Index","JobSeeker");
             }
             else
@@ -66,11 +102,23 @@ namespace JobPortal.Controllers
             }
            
         }
+
+        /// <summary>
+        /// Employer registration view
+        /// </summary>
+        /// <returns></returns>
         public ActionResult EmployerRegister()
         {
             ModelState.Clear();
             return View();
         }
+
+        /// <summary>
+        /// Employer registration process
+        /// </summary>
+        /// <param name="emp">Employer model instance</param>
+        /// <param name="logoUpload">Company logo</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EmployerRegister(EmployerModel emp, HttpPostedFileBase logoUpload)
         {
@@ -81,12 +129,6 @@ namespace JobPortal.Controllers
                 TempData["Message"] = res;
 
             }
-            else
-            {
-                TempData["Message"] = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
-            }
             return View();
         }
         public ActionResult EmployerLogin()
@@ -94,18 +136,24 @@ namespace JobPortal.Controllers
             ModelState.Clear();
             return View();
         }
-
+        /// <summary>
+        /// Employer login process
+        /// </summary>
+        /// <param name="formCollection"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EmployerLogin(FormCollection formCollection)
         {
 
-            string Username = formCollection["Username"];
+            string Email = formCollection["Email"];
             string Password = formCollection["Password"];
             EmployerRepository emp = new EmployerRepository();
-            int res = emp.EmployerLogin(Username, Password);
-            if (res > 0)
+            if (emp.EmployerLogin(Email, Password))
             {
-                Session["EmployerId"] = res;
+                var details = emp.Employers().Find(model => model.Email == Email);
+                Session["EmployerId"] = details.EmployerID;
+
                 return RedirectToAction("Index", "Employer");
             }
             else

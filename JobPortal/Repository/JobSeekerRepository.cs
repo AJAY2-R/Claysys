@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace JobPortal.Repository
 {
@@ -43,6 +44,7 @@ namespace JobPortal.Repository
                 {
                     seeker.Resume = binaryReader.ReadBytes(resumeUpload.ContentLength);
                 }
+                seeker.SetPassword(seeker.Password);
                 connection();
                 SqlCommand com = new SqlCommand("SP_CreateJobSeeker", con);
                 com.CommandType = CommandType.StoredProcedure;
@@ -76,25 +78,18 @@ namespace JobPortal.Repository
         /// <param name="username">Username or Email</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        public int JobSeekerLogin(String username,String password)
+        public bool  JobSeekerLogin([Bind(Include = "Username,Password")] JobSeekerModel seeker)
         {
             try
             {
                 connection();
                 SqlCommand com = new SqlCommand("SP_JobSeekerLogin", con);
                 com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@Username", username);
-                com.Parameters.AddWithValue("@Password", password);
+                com.Parameters.AddWithValue("@Username", seeker.Username);
+                
                 con.Open();
-                int seekerid = (int)com.ExecuteScalar();
-                if (seekerid != 0)
-                    return seekerid;
-                else
-                    return 0;
-            }
-            catch (Exception )
-            {
-                return 0;
+                string res = Convert.ToString(com.ExecuteScalar());
+                return seeker.VerifyPassword(res);
             }
             finally { con.Close(); }
         }
@@ -131,7 +126,8 @@ namespace JobPortal.Repository
                         Image = (byte[])dr["ProfilePicture"],
                         Gender = Convert.ToString(dr["Gender"]),
                         PhoneNumber = Convert.ToString(dr["PhoneNumber"]),
-                        Experience = Convert.ToInt32(dr["Experience"])
+                        Experience = Convert.ToInt32(dr["Experience"]),
+                        Username = Convert.ToString(dr["Username"]),
                     }) ; 
                 }
                 return jobSeeker;

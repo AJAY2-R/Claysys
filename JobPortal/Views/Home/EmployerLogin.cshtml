@@ -7,10 +7,10 @@
 <h2>EmployerLogin</h2>
 
 
-<form action="@Url.Action("EmployerLogin","Home"), method="post">
+<form action="@Url.Action("EmployerLogin","Home")", method="post">
     @Html.AntiForgeryToken()
     <div class="form-group mt-2">
-        <input type="text" name="Username" placeholder="Username" class="form-control" />
+        <input type="text" name="Email" placeholder="Email id" class="form-control" />
     </div>
     <div class="form-group mt-2">
         <input type="password" name="Password" placeholder="Password" class="form-control" />

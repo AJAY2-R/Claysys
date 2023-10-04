@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Claysys job portal";
     Layout = "~/Views/Shared/MainLayout.cshtml";
-    
+
 }
 <h1>Job seeker registration </h1>
 <div class="container">
@@ -10,33 +10,38 @@
         <div class="row">
             <div class="form-group mt-2">
                 <input type="text" name="FirstName" id="FirstName" class="form-control" placeholder="First name"
-                       onfocusout="validateFname(this)" required>
+                       onfocusout="validateFname(this)">
                 <span id="error-fname" class="error-msg"></span>
-
             </div>
             <div class="form-group mt-2">
                 <div class="col-md-5">
-                    <input type="text" name="LastName" id="LastName" placeholder="Last name" class="form-control" onfocusout="validateLname(this)" required>
+                    <input type="text" name="LastName" id="LastName" placeholder="Last name" class="form-control" onfocusout="validateLname(this)">
                     <span id="error-lname" class="error-msg"></span>
                 </div>
             </div>
         </div>
         <div class="mt-2">
-            <select name="Experience" class="form-control" onchange="updateCity()" onfocusout="validateStateCity()">
+            <select name="Experience" class="form-control" onfocusout="validateExperience()">
                 <option>Experience</option>
-                <option value=0>Fresher</option>
-                <option value=1>1</option>
-                <option value=2>2</option>
+                <option value="0">Fresher</option>
+                <option value="1">1 Year</option>
+                <option value="2">2 Year</option>
+                <option value="3">3 Year</option>
+                <option value="4">4 Year</option>
+                <option value="5">5 Year</option>
             </select>
+            <span id="error-experience" class="error-msg"></span>
         </div>
+
         <div class="form-group mt-2">
             <div class="col-md-5">
                 <label for="dob">Date of birth</label><br>
-                <input type="date" name="BirthDate" id="DateOfBirth" required class="form-control" onblur="calcAge(this)">
-                <span id="age"> </span>
+                <input type="date" name="BirthDate" id="DateOfBirth" class="form-control" onblur="validateDate(this)">
+                <p id="age"></p>
                 <span id="error-date" class="error-msg"></span>
             </div>
         </div>
+
         <div class="rform-input-sele mt-2">
             <label>Gender</label><br>
             <input type="radio" name="Gender" id="male" value="M" onchange="validateGender()">Male
@@ -50,7 +55,7 @@
             <span id="error-phone" class="error-msg"></span>
         </div>
         <div class="form-group mt-2">
-            <input type="text" name="Email" id="Email" class="form-control" placeholder="Email address" required
+            <input type="text" name="Email" id="Email" class="form-control" placeholder="Email address"
                    onfocusout="validateEmail(this)">
             <span id="error-email" class="error-msg"></span>
         </div>
@@ -62,39 +67,36 @@
         <div class="form-group mt-2">
             <select name="State" id="state" class="form-control" onchange="updateCity()" onfocusout="validateStateCity()">
                 <option>Select a state</option>
-                <option value="Kerala">Kerala</option>
-                <option value="TamilNadu">TamilNadu</option>
-                <option value="Karnadaka">Karnadaka</option>
             </select>
-            <select name="City" id="city" class="form-control">
+            <select name="City" id="city" class="form-control" onfocusout="validateStateCity()">
                 <option>Select a city</option>
             </select>
             <span id="error-state" class="error-msg"></span>
         </div>
+
         <div class="form-group mt-2">
-            <input type="text" name="Username" id="Username" placeholder="Username" class="form-control" onfocusout="validateUsername(this)" required>
+            <input type="text" name="Username" id="Username" placeholder="Username" class="form-control" onfocusout="validateUsername(this)">
             <span id="error-username" class="error-msg"></span>
         </div>
         <div class="form-group mt-2">
-            <input type="password" name="password" id="Password" class="form-control" placeholder="Password" onkeyup="validateCpass(this)" onfocusout="validatePass(this)" required>
+            <input type="password" name="Password" id="Password" class="form-control" placeholder="Password" onkeyup="validateCpass(this)" onfocusout="validatePass(this)">
             <span id="error-password" class="error-msg"></span>
         </div>
         <div class="form-group mt-2">
-            <input type="password" name="cpassword" id="ConfirmPassword" placeholder="Confirm password" class="form-control" onfocusout="validateCpass(this)" required>
+            <input type="password" name="cpassword" id="ConfirmPassword" placeholder="Confirm password" class="form-control" onfocusout="validateCpass(this)">
             <span id="error-cpassword" class="error-msg"></span>
         </div>
 
         <div class="form-group mt-2">
             <label for="imageUpload">Profile picture</label>
-            <input type="file" name="imageUpload" id="imageUpload" class="form-control" accept=".png, .jpg" required>
-            <span class="text-danger">
-            </span>
+            <input type="file" name="imageUpload" id="imageUpload" class="form-control" accept=".png, .jpg" onchange="validateImage(this)">
+            <span id="error-image" class="text-danger"></span>
         </div>
 
         <div class="form-group mt-2">
             <label for="resumeUpload">Resume</label>
-            <input type="file" name="resumeUpload" id="resumeUpload" class="form-control" accept=".pdf" required>
-            <span class="text-danger"> </span>
+            <input type="file" name="resumeUpload" id="resumeUpload" class="form-control" accept=".pdf" onchange="validateResume(this)">
+            <span id="error-resume" class="text-danger"></span>
         </div>
 
         <div class="form-group mt-2">
@@ -111,4 +113,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-<script src="~/Scripts/MyScripts/script.js"></script>
+<script src="~/Scripts/MyScripts/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCity();
+        disableFutureDates(document.getElementById("DateOfBirth"));
+    });
+</script>
