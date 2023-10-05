@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "AddEductionDetails";
+    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+}
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+<h2>AddEductionDetails</h2>
+<form action=@Url.Action("AddEducationDetails","JobSeeker") method="post">
+    <!--<button id="addEducationButton">[+]</button> -->
+    <div class="card" id="educationContainer">
+        <label for="universityList">University:</label>
+        <select id="universityList" name="University"></select>
+        <label for="major">Major:</label>
+
+        <select id="major" name="Major" required>
+            <option value="Computer Application">Computer Application</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Computer Engineering">Computer Engineering</option>
+        </select>
+
+
+        <label for="degree">Degree:</label>
+        <select id="degree" name="Degree" required>
+            <option value="Master">Master</option>
+            <option value="Graduation">Graduation</option>
+            <option value="Ph.D.">Ph.D.</option>
+        </select>
+
+        <label for="graduationYear">Graduation Year:</label>
+        <input type="number" id="graduationYear" name="GraduationYear" min="1900" max="2099" step="1" required>
+
+        <label for="gpa">GPA:</label>
+        <input type="number" step="0.01" id="gpa" name="Gpa" required>
+    </div>
+    <input type="submit" value="Submit" />
+</form>
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-3.7.1.min.js")
+    @Scripts.Render("~/Scripts/MyScripts/select2.min.js")
+}
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script src="~/Scripts/MyScripts/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#universityList").select2({
+            placeholder: "Select university",
+            allowClear: true,
+            width: '100%'
+        });
+
+        $.getJSON('/Scripts/data.json', function (data) {
+            data.forEach(function (university) {
+                $("#universityList").append(`<option value="${university.name}">${university.name}</option>`);
+            });
+        })
+            .fail(function (error) {
+                console.error('Error loading local JSON file:', error);
+            });
+    });
+    var educationCount = 1;
+    function addEducationSection() {
+        if (educationCount < 3) { 
+
+            var newEducationSection = $("#educationContainer").clone();
+            newEducationSection.find('input[type="text"], input[type="number"]').val('');
+            newEducationSection.find('select').prop('selectedIndex', 0);
+            $("#educationContainer").after(newEducationSection);
+            educationCount++;
+        }
+    }
+    $("#addEducationButton").click(function () {
+        addEducationSection();
+    });
+</script>
+

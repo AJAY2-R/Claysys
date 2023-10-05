@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="~/icon.png" type="image/x-icon">
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/MyCss/site.css")
     @Scripts.Render("~/bundles/modernizr")
@@ -23,6 +24,7 @@
                     <a href="#service3">Service 3</a>
                 </div>
             </div>
+            @Html.ActionLink("Jobs","Jobs","JobSeeker")
             <div class="cus-dropdown">
                 <button class="cus-dropbtn">Comapanies</button>
                 <div class="cus-dropdown-content">

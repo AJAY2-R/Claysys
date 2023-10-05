@@ -32,7 +32,7 @@ namespace JobPortal.Repository
         /// <param name="imageUpload">Profile picture</param>
         /// <param name="resumeUpload">Resume</param>
         /// <returns></returns>
-        public string JobSeekerRegiser(JobSeekerModel seeker,HttpPostedFileBase imageUpload, HttpPostedFileBase resumeUpload)
+        public bool JobSeekerRegister(JobSeekerModel seeker,HttpPostedFileBase imageUpload, HttpPostedFileBase resumeUpload)
         {
             try
             {
@@ -64,11 +64,7 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@Address", seeker.Address);
                 con.Open();
                 int i = com.ExecuteNonQuery();
-                return "Regsitered";
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
+                return i > 0;
             }
             finally { con.Close(); }
         }
@@ -133,5 +129,92 @@ namespace JobPortal.Repository
                 return jobSeeker;
             }finally { con.Close(); }
         }
+
+        /// <summary>
+        /// Add job seeker education details to database
+        /// </summary>
+        /// <param name="educationList"></param>
+        /// <returns></returns>
+        public bool AddEducationDetails(EducationDetails obj ,int id)
+        {
+            try
+            {
+                connection();
+                con.Open();
+                    obj.SeekerId = id;
+                    SqlCommand com = new SqlCommand("SP_CreateEducationDetail", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@SeekerId", obj.SeekerId);
+                    com.Parameters.AddWithValue("@Gpa", obj.Gpa);
+                    com.Parameters.AddWithValue("@Major", obj.Major);
+                    com.Parameters.AddWithValue("@Degree", obj.Degree);
+                    com.Parameters.AddWithValue("@University", obj.University);
+                    com.Parameters.AddWithValue("@GraduationYear", obj.GraduationYear);
+
+                    int i = com.ExecuteNonQuery();
+                return i > 0;            
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        /// <summary>
+        /// Dispaly education deatils
+        /// </summary>
+        /// <param name="seekerId">Job seeker id</param>
+        /// <returns></returns>
+        public List<EducationDetails> GetEducationDetails(int seekerId)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_ReadEducationDetails", con);
+                List<EducationDetails> educationDetails = new List<EducationDetails>();
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@SeekerId", seekerId);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    educationDetails.Add(new EducationDetails()
+                    {
+                        Gpa = Convert.ToDouble(dr["GPA"]),
+                        Major = Convert.ToString(dr["Major"]),
+                        Degree = Convert.ToString(dr["Degree"]),
+                        University = Convert.ToString(dr["University"]),
+                        GraduationYear = Convert.ToInt32(dr["GraduationYear"])
+                    });
+                }
+                
+                return educationDetails;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Apply for  job 
+        /// </summary>
+        /// <param name="application">Job application model </param>
+        /// <returns></returns>
+        public bool CreateJobApplication(JobApplication application)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_CreateJobApplication", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@JobID", application.JobApplicationID);
+                com.Parameters.AddWithValue("@SeekerID", application.SeekerId);
+                com.Parameters.AddWithValue("@ApplicationDate", application.ApplicationDate);
+                con.Open();
+                int rowsAffected = com.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+            finally { con.Close(); }
+        }
+
     }
 }

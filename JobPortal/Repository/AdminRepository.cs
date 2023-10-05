@@ -107,6 +107,47 @@ namespace JobPortal.Repository
             }
             finally { con.Close(); }
         }
+
+        /// <summary>
+        /// Employer approve 
+        /// </summary>
+        /// <param name="id"> Employer id</param>
+        /// <returns></returns>
+        public bool EmployerApprove(int id)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_EmployerApprove", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerId", id);
+
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i >= 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Employer reject
+        /// </summary>
+        /// <param name="id"> Employer id</param>
+        /// <returns></returns>
+        public bool EmployerReject(int id)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_EmployerReject", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerId", id);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i >= 0;
+            }
+            finally { con.Close(); }
+        }
+
     }
 
 }

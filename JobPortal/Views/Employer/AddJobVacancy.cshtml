@@ -1,0 +1,37 @@
+﻿@model List<JobPortal.Models.Category>
+
+@{
+    ViewBag.Title = "AddJobVacancy";
+    Layout = "~/Views/Shared/EmployerLayout.cshtml";
+}
+
+<h2>AddJobVacancy</h2>
+
+<form action="@Url.Action("AddJobVacancy","Employer")" method="post">
+    <label for="JobTitle">Job Title:</label>
+    <input type="text" id="JobTitle" name="JobTitle" required><br>
+
+    <label for="Description">Description:</label><br>
+    <textarea id="Description" name="Description" rows="4" required></textarea><br>
+
+    <label for="CategoryID">Category:</label>
+    <select id="CategoryID" name="CategoryID" required>
+        @foreach (var cat in Model)
+        {
+            <option value="@cat.CategoryId">@cat.CategoryName</option>
+        }
+    </select><br>
+
+    <label for="Location">Location:</label>
+    <input type="text" id="Location" name="Location" required><br>
+
+    <label for="Salary">Salary:</label>
+    <input type="number" id="Salary" name="Salary" required><br>
+
+    <label for="EmploymentType">Employment Type:</label>
+    <input type="text" id="EmploymentType" name="EmploymentType" required><br>
+
+    <label for="ApplicationDeadline">Application Deadline:</label>
+    <input type="date" id="ApplicationDeadline" name="ApplicationDeadline" required><br>
+    <input type="submit" value="Add Vacancy">
+</form>

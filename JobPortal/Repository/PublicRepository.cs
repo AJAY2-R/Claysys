@@ -52,5 +52,72 @@ namespace JobPortal.Repository
             }
             finally { con.Close(); }
         }
+
+        /// <summary>
+        /// Display Job vacancy list
+        /// </summary>
+        /// <returns></returns>
+        public List<JobVacancy> GetJobVacancies()
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_ReadJobVacancy", con);
+                List<JobVacancy> jobVacancies = new List<JobVacancy>();
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    jobVacancies.Add(new JobVacancy()
+                    {
+                        VacancyID = Convert.ToInt32(dr["VacancyID"]),
+                        EmployerID = Convert.ToInt32(dr["EmployerID"]),
+                        JobTitle = Convert.ToString(dr["JobTitle"]),
+                        Description = Convert.ToString(dr["Description"]),
+                        CategoryID = Convert.ToInt32(dr["CategoryID"]),
+                        Location = Convert.ToString(dr["Location"]),
+                        Salary = Convert.ToDecimal(dr["Salary"]),
+                        EmploymentType = Convert.ToString(dr["EmploymentType"]),
+                        ApplicationDeadline = Convert.ToDateTime(dr["ApplicationDeadline"]),
+                        IsPublished = Convert.ToBoolean(dr["IsPublished"])
+                    });
+                }
+
+                return jobVacancies;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Display categories
+        /// </summary>
+        /// <returns></returns>
+        public List<Category> DisplayCategories()
+        {
+            List<Category> skill = new List<Category>();
+            try
+            {
+                connection();
+                SqlCommand cmd = new SqlCommand("SP_ReadCategories", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    skill.Add(new Category()
+                    {
+                        CategoryId = Convert.ToInt32(dr["CategoryID"]),
+                        CategoryName = Convert.ToString(dr["CategoryName"])
+                    });
+                }
+                return skill;
+            }
+            finally { con.Close(); }
+        }
     }
 }

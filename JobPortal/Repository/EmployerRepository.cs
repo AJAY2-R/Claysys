@@ -30,7 +30,7 @@ namespace JobPortal.Repository
         /// <param name="emp">Employe instance</param>
         /// <param name="logoUpload">Company logo </param>
         /// <returns></returns>
-        public string EmployerRegister(EmployerModel emp, HttpPostedFileBase logoUpload)
+        public bool EmployerRegister(EmployerModel emp, HttpPostedFileBase logoUpload)
         {
             try
             {
@@ -53,11 +53,7 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@Password", emp.Password);
                 con.Open();
                 int i = com.ExecuteNonQuery();
-                return "Registered Successfully ";
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
+                return i > 0;
             }
             finally { con.Close(); }
         }
@@ -77,11 +73,10 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@Email", email);
                 con.Open();
                 string res = Convert.ToString(com.ExecuteScalar());
-                return BCrypt.Net.BCrypt.Verify(password,res);
+                return BCrypt.Net.BCrypt.Verify(password, res);
             }
             finally { con.Close(); }
         }
-
         /// <summary>
         /// Details of all employer 
         /// </summary>
@@ -111,16 +106,117 @@ namespace JobPortal.Repository
                         Website = Convert.ToString(dr["Website"]),
                         Name = Convert.ToString(dr["Name"]),
                         Designation = Convert.ToString(dr["Designation"]),
-                        CompanyLogo =(byte[]) dr["CompanyLogo"]
-                    }); 
+                        CompanyLogo = (byte[])dr["CompanyLogo"],
+                        Status = Convert.ToString(dr["Status"])
+                    });
                 }
 
                 return employers;
             }
             finally
             {
-                con.Close(); 
+                con.Close();
             }
+        }
+
+        /// <summary>
+        /// Add Job vaccancy
+        /// </summary>
+        /// <param name="obj">Job vaccency object</param>
+        /// <param name="employerId">Emplyer who post vaccency </param>
+        /// <returns></returns>
+        public bool AddJobVacancy(JobVacancy obj, int employerId)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_CreateJobVacancy", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerID", employerId);
+                com.Parameters.AddWithValue("@JobTitle", obj.JobTitle);
+                com.Parameters.AddWithValue("@Description", obj.Description);
+                com.Parameters.AddWithValue("@CategoryID", obj.CategoryID);
+                com.Parameters.AddWithValue("@Location", obj.Location);
+                com.Parameters.AddWithValue("@Salary", obj.Salary);
+                com.Parameters.AddWithValue("@EmploymentType", obj.EmploymentType);
+                com.Parameters.AddWithValue("@ApplicationDeadline", obj.ApplicationDeadline);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i > 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Approve job application
+        /// </summary>
+        /// <param name="id">Application id</param>
+        /// <returns></returns>
+        public bool JobApplicationApprove(int id)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_JobApplicationApprove", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@ApplicationId", id);
+
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i >= 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// JobApplication reject
+        /// </summary>
+        /// <param name="id"> Employer id</param>
+        /// <returns></returns>
+        public bool JobApplicationReject(int id)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_JobApplicationReject", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@ApplicationId", id);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i >= 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Display job application for a particular job
+        /// </summary>
+        /// <param name="JobId">Job id</param>
+        /// <returns></returns>
+        public List<JobApplication> GetJobApplications(int JobId)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_ReadJobApplication", con);
+                List<JobApplication> jobApplications = new List<JobApplication>();
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@JobId", JobId);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    jobApplications.Add(new JobApplication()
+                    {
+                        JobApplicationID = Convert.ToInt32(dr["ApplicationID"]),
+                        JobId = Convert.ToInt32(dr["JobId"]),
+                        SeekerId = Convert.ToInt32(dr["SeekerID"]),
+                        ApplicationDate = Convert.ToDateTime(dr["ApplicationDate"]),
+                        Status = Convert.ToString(dr["Status"])
+                    });
+                }
+                return jobApplications;
+            }finally { con.Close(); }
         }
     }
 }

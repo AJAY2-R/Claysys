@@ -140,5 +140,74 @@ namespace JobPortal.Controllers
                 return View(ex.Message);
             }
         }
+        /// <summary>
+        /// Edit category
+        /// </summary>
+        /// <param name="id">Category id</param>
+        /// <returns></returns>
+        public ActionResult EditCategory(int id)
+        {
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                var category = repo.DisplayCategories().Find(cat => cat.CategoryId == id);
+                return View(category);
+            }catch(Exception ex)
+            {
+                return View(ex.Message);    
+            }
+        } 
+        /// <summary>
+        /// Pending verfication list of Employer
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult VerifyEmployer()
+        {
+            try
+            {
+                EmployerRepository repo = new EmployerRepository();
+                var employer = repo.Employers().Where(emp => emp.Status == "Pending");
+                return View(employer);
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        [HttpGet]
+        public ActionResult EmployerApprove(int id)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.EmployerApprove(id))
+                {
+                    TempData["Message"] = "Employer approved..";
+                    return RedirectToAction("VerifyEmployer");
+                }
+                return View();
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EmployerReject(int id)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.EmployerReject(id))
+                {
+                    TempData["Message"] = "Employer rejected..";
+                    return RedirectToAction("VerifyEmployer");
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
     }
 }

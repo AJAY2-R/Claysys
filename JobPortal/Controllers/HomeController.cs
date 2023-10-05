@@ -42,13 +42,24 @@ namespace JobPortal.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult JobSeekerRegister(JobSeekerModel jobSeeker, HttpPostedFileBase imageUpload, HttpPostedFileBase resumeUpload)
         {
-            if (ModelState.IsValid)
+            try
             {
-                JobSeekerRepository seeker = new JobSeekerRepository();
-                string res = seeker.JobSeekerRegiser(jobSeeker,imageUpload,resumeUpload);
-                TempData["Message"] = res;
+                if (ModelState.IsValid)
+                {
+                    JobSeekerRepository seeker = new JobSeekerRepository();
+                    if (seeker.JobSeekerRegister(jobSeeker, imageUpload, resumeUpload))
+                    {
+                        TempData["Message"] = "Registration successful ";
+                        return RedirectToAction("JobSeekerLogin");
+                    }
+                }
+                return View();  
+            }catch(Exception )
+            {
+                TempData["Message"] = "Email alredy registred ";
+                return View();
             }
-            return View();
+           
         }
 
         /// <summary>
@@ -122,14 +133,22 @@ namespace JobPortal.Controllers
         [HttpPost]
         public ActionResult EmployerRegister(EmployerModel emp, HttpPostedFileBase logoUpload)
         {
-            EmployerRepository emprepo = new EmployerRepository();
-            if (ModelState.IsValid)
+            try
             {
-                string res = emprepo.EmployerRegister(emp, logoUpload);
-                TempData["Message"] = res;
-
+                EmployerRepository emprepo = new EmployerRepository();
+                if (ModelState.IsValid)
+                {
+                    if (emprepo.EmployerRegister(emp, logoUpload)){
+                        TempData["Message"] = "Registred Successfully";
+                        return RedirectToAction("EmployerLogin");
+                    }
+                }
+                return View();
+            }catch(Exception)
+            {
+                TempData["Message"] = "Email is alredy registred";
+                return View();
             }
-            return View();
         }
         public ActionResult EmployerLogin()
         {
@@ -161,6 +180,14 @@ namespace JobPortal.Controllers
                 TempData["Message"] = "Username or password error ";
                 return View();
             }
+
+        }
+        public ActionResult Jobs()
+        {
+
+            PublicRepository repo = new PublicRepository();
+            var vacency = repo.GetJobVacancies();
+            return View(vacency);
 
         }
     }

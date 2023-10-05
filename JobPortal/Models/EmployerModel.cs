@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Remoting.Services;
-using System.Web;
-
+using BCrypt.Net;
 namespace JobPortal.Models
 {
+    /// <summary>
+    /// Employer model
+    /// </summary>
     public class EmployerModel
     {
         [Key]
@@ -21,7 +20,7 @@ namespace JobPortal.Models
         public string OfficialEmail { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string ContactEmail { get; set; }
+        public string Email { get; set; }
         [Required(ErrorMessage ="Enter the phone number")]
         [Phone(ErrorMessage = "Invalid Phone Number")]
         public string ContactPhone { get; set; }
@@ -37,7 +36,50 @@ namespace JobPortal.Models
         [Required(ErrorMessage = "Designation is required")]
         [StringLength(50, ErrorMessage = "Designation cannot exceed 50 characters")]
         public string Designation { get; set; }
-
+        [Required(ErrorMessage ="Password is required")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
         public byte[] CompanyLogo { get; set; }
+        public string Status { get; set; }  
+        public void SetPassword(string password)
+        {
+            Password = BCrypt.Net.BCrypt.HashPassword(password);
+        }
+        public bool VerifyPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, Password);
+        }
     }
+
+    /// <summary>
+    /// Category model
+    /// </summary>
+    public class Category
+    {
+        [Key]
+        public int CategoryId { get; set; }
+
+        [Required(ErrorMessage ="Enter the category ")]
+        public string CategoryName { get; set; }
+    }
+    /// <summary>
+    /// Job vacancy model 
+    /// </summary>
+    public class JobVacancy
+    {
+        [Key]
+        public int VacancyID { get; set; }
+        public int EmployerID { get; set; }
+        public string JobTitle { get; set; }
+        public string Description { get; set; }
+        public int CategoryID { get; set; }
+        public string Location { get; set; }
+        public decimal Salary { get; set; }
+        public string EmploymentType { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
+        [DataType(DataType.Date)]
+        public DateTime ApplicationDeadline { get; set; }
+        public bool IsPublished { get; set; }
+    }
+
 }

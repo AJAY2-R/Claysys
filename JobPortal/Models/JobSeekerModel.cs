@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Common;
-using System.Drawing;
-using System.Linq;
-using System.Web;
 
 namespace JobPortal.Models
 {
+    /// <summary>
+    /// Job seeker model
+    /// </summary>
     public class JobSeekerModel
     {
         [Key]
@@ -52,5 +51,75 @@ namespace JobPortal.Models
         public string State { get;set; }
         [Required(ErrorMessage = "Enter the username")]
         public string Username { get;set; }
+
+        /// <summary>
+        /// Encrypt the password
+        /// </summary>
+        /// <param name="password">Password</param>
+        public void SetPassword(string password)
+        {
+            Password = BCrypt.Net.BCrypt.HashPassword(password);
+        }
+        /// <summary>
+        /// Password Encryption
+        /// </summary>
+        /// <param name="password">Password fetched from the database</param>
+        /// <returns></returns>
+        public bool VerifyPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.Verify( Password, password);
+        }
+    }
+    /// <summary>
+    /// Skills Model
+    /// </summary>
+    public class Skills
+    {
+        [Key]
+        public int SkillId {get; set;}
+        [Required(ErrorMessage ="Enter the skill ")]
+        public string SkillName { get; set; }
+    }
+    /// <summary>
+    /// Education details model of the job seeker
+    /// </summary>
+    public class EducationDetails
+    {
+        [Key]
+        public int EducationId { get;set; }
+        public int SeekerId { get; set; }
+        public double Gpa { get; set; }
+        public string Major { get; set; }
+        public string Degree { get; set; }
+        public string University {  get; set; }
+        public int GraduationYear { get; set; }
+
+    }
+    /// <summary>
+    /// Job seeker skills model
+    /// </summary>
+    public class SeekerSkills
+    {
+        [Key]
+        public int JobSeekerSkillID { get; set;}
+        public int SeekerId { get; set;}
+        public int SkillId { get; set;}
+    }
+    /// <summary>
+    /// Job Application Model - Job applications applied by the user
+    /// </summary>
+    public class JobApplication
+    {
+        [Key]
+        public int JobApplicationID { get; set; }
+        public int SeekerId { get; set; }
+        public int JobId { get; set; }
+        public DateTime ApplicationDate { get; set; }
+        public string Status { get; set; }
+    }
+    public class JobSeekerProfile
+    {
+        public JobSeekerModel JobSeekerDetails { get; set; }
+        public List<EducationDetails> EducationDetails { get; set; }
     }
 }
