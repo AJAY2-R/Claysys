@@ -13,18 +13,11 @@
 <body>
     <navbar>
         <div class="cus-navbar-logo">
-            <img src="~/Content/Static/claysys-logo.png">
+           <a href="/" ><img src="~/Content/Static/claysys-logo.png"></a>
         </div>
         <div class="cus-navbar">
-            <div class="cus-dropdown">
-                <button class="cus-dropbtn">Jobs</button>
-                <div class="cus-dropdown-content">
-                    <a href="@Url.Action("DisplayVacancy","Home")">Jobs</a>
-                    <a href="#service2">Service 2</a>
-                    <a href="#service3">Service 3</a>
-                </div>
-            </div>
 
+            <a href="@Url.Action("Jobs","Home")">Jobs</a>
             <a href="@Url.Action("JobSeekerLogin","Home")" class="btn-login">Login</a>
 
             <a href="@Url.Action("JobSeekerRegister", "Home")" class="btn-register">Register</a>
@@ -61,7 +54,9 @@
                 <svg class="bi me-2" width="40" height="32"><img src="~/Content/Static/claysys-logo.png"></svg>
 
             </a>
-            <p class="bi me-2">Connect with us</p>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="@Url.Action("Login","Admin")" class="nav-link p-0 text-muted">Admin Login</a></li>
+            </ul>
         </div>
         <div class="col">
 

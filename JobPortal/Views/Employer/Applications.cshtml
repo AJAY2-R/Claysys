@@ -27,26 +27,52 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SeekerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Approve", "ApplicationApprove", new { id=item.JobApplicationID }) |
-            @Html.ActionLink("Reject", "ApplicationReject", new { id=item.JobApplicationID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.JobApplicationID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeekerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+
+            <div class="job-item" data-job-id="@item.JobApplicationID">
+                @Html.ActionLink("Details", "JobSeekerProfile", new { id = item.SeekerId },new {@class="job-link"})
+            </div>
+                @Html.ActionLink("Approve", "ApplicationApprove", "Employer", new { id = item.JobApplicationID, aid = item.JobId }, null)  |
+                @Html.ActionLink("Reject", "ApplicationReject", new { id = item.JobApplicationID, aid = item.JobId }) |
+
+            </td>
+        </tr>
+    }
 
 </table>
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function () {
+    $(".job-link").click(function (e) {
+        e.preventDefault();
+        var jobId = $(this).closest(".job-item").data("job-id");
+        var url = "/Employer/ApplicationRead/" + jobId; 
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (data) {
+                console.log('HTTP Status Code:', xhr.status);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('Error:', textStatus, errorThrown);
+            }
+        });
+        window.location.href = e.target.href;
+    });
+});
+</script>

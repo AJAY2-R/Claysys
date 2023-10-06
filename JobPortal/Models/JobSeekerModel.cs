@@ -122,4 +122,45 @@ namespace JobPortal.Models
         public JobSeekerModel JobSeekerDetails { get; set; }
         public List<EducationDetails> EducationDetails { get; set; }
     }
+    public class JobDetails
+    {
+        [Key]
+        public int JobID { get; set; }
+        public int EmployerID { get; set; }
+        public string JobTitle { get; set; }
+        public string Description { get; set; }
+        public string CategoryName { get; set; }
+        public string Location { get; set; }
+        public decimal Salary { get; set; }
+        public string EmploymentType { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
+        [DataType(DataType.Date)]
+        public DateTime ApplicationDeadline { get; set; }
+        public string CompanyName { get; set; }
+        public string OfficialEmail { get; set; }
+        public string Email { get; set; }
+        public string ContactPhone { get; set; }
+        public string Website { get; set; }
+        public string EmployerName { get; set; }
+        public string Designation { get; set; }
+        public byte[] CompanyLogo { get; set; }
+    }
+    /// <summary>
+    /// View status of the job
+    /// </summary>
+    public class ViewJob
+    {
+        [Key]
+        public int JobId { get; set; }
+        public int SeekerId { get; set; }
+        public DateTime ViewDate { get; set; }
+    }
+
+    public class Bookmark
+    {
+        [Key]
+        public int BookmarkId { get; set; }
+        public int JobId { get; set; }
+        public int SeekerId { get; set; }
+    }
 }

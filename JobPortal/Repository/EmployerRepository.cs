@@ -73,6 +73,9 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@Email", email);
                 con.Open();
                 string res = Convert.ToString(com.ExecuteScalar());
+                if (res == "0") {
+                return false;
+                }
                 return BCrypt.Net.BCrypt.Verify(password, res);
             }
             finally { con.Close(); }
@@ -184,6 +187,24 @@ namespace JobPortal.Repository
                 return i >= 0;
             }
             finally { con.Close(); }
+        }
+        /// <summary>
+        /// Update the job application status to Read
+        /// </summary>
+        /// <param name="id">Applcation id</param>
+        /// <returns></returns>
+        public bool JobApplicationRead(int id)
+        {
+            try { 
+                connection();
+                SqlCommand com = new SqlCommand("SP_JobApplicationRead", con);
+                com.CommandType =CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@ApplicationId", id);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i >= 0;
+            }
+            finally { con.Close(); }    
         }
         /// <summary>
         /// Display job application for a particular job

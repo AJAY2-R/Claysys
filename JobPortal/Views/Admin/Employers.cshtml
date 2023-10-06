@@ -1,0 +1,77 @@
+﻿@model IEnumerable<JobPortal.Models.EmployerModel>
+
+@{
+    ViewBag.Title = "Employers";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Employers</h2>
+<table class="table">
+    <tr>
+        <th>Company Logo</th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OfficialEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContactPhone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Website)
+        </th>
+        <th>
+            Employer Name
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Designation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td><img src="data:png/jpg;base64,@Convert.ToBase64String(item.CompanyLogo)" width="100px" height="100px"/></td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OfficialEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactPhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Website)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Designation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.EmployerID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.EmployerID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.EmployerID })
+        </td>
+    </tr>
+}
+
+</table>

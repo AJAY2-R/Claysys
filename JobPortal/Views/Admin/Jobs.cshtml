@@ -2,29 +2,24 @@
 
 @{
     ViewBag.Title = "DisplayVacancy";
-    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h2>Jobs</h2>
-
+<h2>DisplayVacancy</h2>
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.EmployerID)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.JobTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryID)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Location)
         </th>
-
         <th>
             @Html.DisplayNameFor(model => model.EmploymentType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationDeadline)
         </th>
         <th></th>
     </tr>
@@ -32,13 +27,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.EmployerID)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.JobTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryID)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Location)
@@ -47,10 +36,9 @@
             @Html.DisplayFor(modelItem => item.EmploymentType)
         </td>
         <td>
-                @Html.ActionLink("Details", "JobDetails", new { id = item.VacancyID }) 
-                @Html.ActionLink("Apply", "ApplyJob", new { id = item.VacancyID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.VacancyID })
-</td>
+            @Html.DisplayFor(modelItem => item.ApplicationDeadline)
+        </td>
+
     </tr>
 }
 

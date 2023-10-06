@@ -1,0 +1,46 @@
+﻿@model JobPortal.Models.JobSeekerProfile
+@{
+    ViewBag.Title = "JobSeekerDetailsProfile";
+    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+}
+
+<h2> Profile</h2>
+
+<div>
+    <h4>@Model.JobSeekerDetails.FirstName @Model.JobSeekerDetails.LastName</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>First Name:</dt>
+        <dd>@Model.JobSeekerDetails.FirstName</dd>
+
+        <dt>Last Name:</dt>
+        <dd>@Model.JobSeekerDetails.LastName</dd>
+
+        <dt>Email:</dt>
+        <dd>@Model.JobSeekerDetails.Email</dd>
+
+        <dt>Gender:</dt>
+        <dd>@Model.JobSeekerDetails.Gender</dd>
+
+        <dt>Birthdate:</dt>
+        <dd>@Model.JobSeekerDetails.Birthdate.ToString("yyyy/MM/dd")</dd>
+
+        <dt>Phone Number:</dt>
+        <dd>@Model.JobSeekerDetails.PhoneNumber</dd>
+
+        <dt>Experience:</dt>
+        <dd>@Model.JobSeekerDetails.Experience</dd>
+
+
+    </dl>
+</div>
+
+<h4>Education Details</h4>
+<hr />
+
+<ul>
+    @foreach (var detail in Model.EducationDetails)
+    {
+        <li>@detail.Major - @detail.Degree</li>
+    }
+</ul>

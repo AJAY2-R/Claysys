@@ -1,0 +1,163 @@
+﻿@model JobPortal.Models.JobDetails
+
+@{
+    ViewBag.Title = "JobDetails";
+    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+}
+
+<h2>JobDetails</h2>
+
+<button id="Save">Save</button>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.DisplayFor(model => model.EmployerID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmploymentType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmploymentType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationDeadline)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationDeadline)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialEmail)
+        </dd>
+
+        <dt>
+            Contact Email
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Website)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+    </dl>
+</div>
+
+
+<script src="~/Scripts/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+            var jobId = @Model.JobID;
+            var url = "/JobSeeker/ViewJob/" + jobId;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data,xhr) {
+                    console.log('HTTP Status Code:', xhr.status);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                }
+            });
+             $("#Save").click(function () {
+            var url = "/JobSeeker/Bookmark/" + jobId;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data, xhr) {
+                        console.log('HTTP Status Code:', xhr.status);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                    }
+                });
+            });    
+    });
+</script>

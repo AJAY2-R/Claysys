@@ -7,28 +7,13 @@
 
 <h2>DisplayVacancy</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EmployerID)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.JobTitle)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryID)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Location)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Salary)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.EmploymentType)
@@ -36,31 +21,16 @@
         <th>
             @Html.DisplayNameFor(model => model.ApplicationDeadline)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.EmployerID)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.JobTitle)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryID)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Salary)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.EmploymentType)
@@ -68,14 +38,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.ApplicationDeadline)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPublished)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.VacancyID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.VacancyID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.VacancyID })
-        </td>
+
     </tr>
 }
 

@@ -1,5 +1,6 @@
 ﻿using JobPortal.Models;
 using JobPortal.Repository;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,6 +106,81 @@ namespace JobPortal.Controllers
                 return View(ex.Message);
             }
         }
-      
+        /// <summary>
+        /// Visit job to store who visisted the job
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ViewJob(int id)
+        {
+            try
+            {
+                JobSeekerRepository repo = new JobSeekerRepository();
+                ViewJob obj = new ViewJob
+                {
+                    JobId = id,
+                    SeekerId = Convert.ToInt32(Session["SeekerId"]),
+                    ViewDate = DateTime.Now,
+                };
+                if (repo.VisitJob(obj))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(400);
+            }
+            catch(Exception ){
+                return new HttpStatusCodeResult(400);
+            }
+        }
+        /// <summary>
+        /// Create and delete bookmark
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Bookmark(int id)
+        {
+            try
+            {
+                JobSeekerRepository repo = new JobSeekerRepository();
+                Bookmark obj = new Bookmark { 
+                    JobId = id,
+                    SeekerId = Convert.ToInt32(Session["SeekerId"]),
+                };
+                if (repo.Bookmark(obj))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(400);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
+        public ActionResult SavedJobs()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Display job details 
+        /// </summary>
+        /// <param name="id">Job id</param>
+        /// <returns></returns>
+        public ActionResult JobDetails(int id)
+        {
+            PublicRepository repo =new PublicRepository();
+            return View(repo.GetJobDetails().Find(model => model.JobID == id));  
+
+        }
+
+        public ActionResult AppliedJobs()
+        {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            int id = Convert.ToInt32(Session["SeekerId"]);
+            return View(repo.GetJobApplications(id));
+        }
     }
 }

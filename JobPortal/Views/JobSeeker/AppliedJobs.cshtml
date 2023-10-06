@@ -1,0 +1,41 @@
+﻿@model IEnumerable<JobPortal.Models.JobApplication>
+
+@{
+    ViewBag.Title = "AppliedJobs";
+    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+}
+
+<h2>AppliedJobs</h2>
+
+<p>
+    @Html.ActionLink("Apply ", "Jobs")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.JobId)
+        </th>
+        <th>
+            Applied date
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+    </tr>
+}
+
+</table>

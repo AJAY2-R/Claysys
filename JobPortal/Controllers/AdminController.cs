@@ -24,7 +24,11 @@ namespace JobPortal.Controllers
             ModelState.Clear();
             return View();
         }
-
+        /// <summary>
+        /// Admin Login
+        /// </summary>
+        /// <param name="formCollection"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Login(FormCollection formCollection)
         {
@@ -79,19 +83,43 @@ namespace JobPortal.Controllers
                 return View(ex.Message);
             }
         }
-
-        public ActionResult DisplaySkills()
+        /// <summary>
+        /// Show skills
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Skills()
         {
             PublicRepository repo = new PublicRepository();
             var skills = repo.DisplaySkills();
             return View(skills);
         }
+        /// <summary>
+        /// Display Categories
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Categories()
+        {
+            PublicRepository repo = new PublicRepository();
+            var cate = repo.DisplayCategories();
+            return View(cate);
+        }
+        /// <summary>
+        /// Edit skills
+        /// </summary>
+        /// <param name="id">Skill id</param>
+        /// <returns></returns>
         public ActionResult EditSkill(int id)
         {
             PublicRepository repo = new PublicRepository();
             var skill = repo.DisplaySkills().Find(sk => sk.SkillId == id);
             return View(skill);
         }
+        /// <summary>
+        /// Edit skill
+        /// </summary>
+        /// <param name="id">Skill id</param>
+        /// <param name="obj">Skill object</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditSkill(int id, Skills obj)
         {
@@ -111,7 +139,10 @@ namespace JobPortal.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// Add category
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AddCategory()
         {
             return View();  
@@ -173,6 +204,11 @@ namespace JobPortal.Controllers
                 return View(ex.Message);
             }
         }
+        /// <summary>
+        /// Approve Employer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult EmployerApprove(int id)
         {
@@ -190,7 +226,11 @@ namespace JobPortal.Controllers
                 return View(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Employer reject
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult EmployerReject(int id)
         {
@@ -208,6 +248,36 @@ namespace JobPortal.Controllers
             {
                 return View(ex.Message);
             }
+        }
+        /// <summary>
+        /// Display all the job seekers
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult JobSeekers()
+        {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            return View(repo.JobSeekers());
+        }
+        /// <summary>
+        /// Display all the Employers 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Employers()
+        {
+            EmployerRepository repo = new EmployerRepository();
+            return View(repo.Employers());
+        }
+        /// <summary>
+        /// Display all the jobs
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Jobs()
+        {
+
+            PublicRepository repo = new PublicRepository();
+            var vacency = repo.GetJobVacancies();
+            return View(vacency);
+
         }
     }
 }

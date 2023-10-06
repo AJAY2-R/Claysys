@@ -119,5 +119,48 @@ namespace JobPortal.Repository
             }
             finally { con.Close(); }
         }
+
+        public List<JobDetails> GetJobDetails()
+        {
+            try
+            {
+            connection();
+            SqlCommand com = new SqlCommand("SP_ReadJobDetails", con);
+            List<JobDetails> jobDetails = new List<JobDetails>();
+            com.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+            con.Open();
+            da.Fill(dt);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                jobDetails.Add(new JobDetails()
+                {
+                    JobID = Convert.ToInt32(dr["VacancyID"]),
+                    EmployerID = Convert.ToInt32(dr["EmployerID"]),
+                    JobTitle = Convert.ToString(dr["JobTitle"]),
+                    Description = Convert.ToString(dr["Description"]),
+                    CategoryName = Convert.ToString(dr["Category"]),
+                    Location = Convert.ToString(dr["Location"]),
+                    Salary = Convert.ToDecimal(dr["Salary"]),
+                    EmploymentType = Convert.ToString(dr["EmploymentType"]),
+                    ApplicationDeadline = Convert.ToDateTime(dr["ApplicationDeadline"]),
+                    CompanyName = Convert.ToString(dr["CompanyName"]),
+                    OfficialEmail = Convert.ToString(dr["OfficialEmail"]),
+                    Email = Convert.ToString(dr["Email"]),
+                    ContactPhone = Convert.ToString(dr["ContactPhone"]),
+                    Website = Convert.ToString(dr["Website"]),
+                    EmployerName = Convert.ToString(dr["EmployerName"]),
+                    Designation = Convert.ToString(dr["Designation"]),
+                    CompanyLogo = (byte[])dr["CompanyLogo"],
+
+                });
+            }
+
+            return jobDetails;
+            }
+            finally { con.Close(); }
+        }
     }
 }

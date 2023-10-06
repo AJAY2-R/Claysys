@@ -79,7 +79,7 @@ namespace JobPortal.Controllers
         /// <param name="id">Aplication id</param>
         /// <returns></returns>
         [HttpGet] 
-        public ActionResult ApplicationApprove(int id)
+        public ActionResult ApplicationApprove(int id,int aid)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace JobPortal.Controllers
                 {
                     TempData["Message"] = "Application Approved";
                 }
-                return RedirectToAction("Applications");
+                return RedirectToAction("Applications",new {id = aid});
             }
             catch(Exception ex)
             {
@@ -98,10 +98,10 @@ namespace JobPortal.Controllers
         /// <summary>
         /// Reject application
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Application id</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult ApplicationReject(int id)
+        public ActionResult ApplicationReject(int id,int aid)
         {
             try
             {
@@ -110,12 +110,47 @@ namespace JobPortal.Controllers
                 {
                     TempData["Message"] = "Application Rejected";
                 }
-                return RedirectToAction("Applications");
+                return RedirectToAction("Applications",new {id=aid});
             }
             catch (Exception ex)
             {
                 return View(ex.Message);
             }
         }
+        /// <summary>
+        /// Update status to read 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ApplicationRead(int id)
+        {
+            try
+            {
+                EmployerRepository repo = new EmployerRepository();
+                if (repo.JobApplicationRead(id))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(400);
+            }
+            catch(Exception) {
+                return new HttpStatusCodeResult(400);
+            }
+
+        }
+
+        public ActionResult JobSeekerProfile(int id)
+        {
+            JobSeekerRepository seeker = new JobSeekerRepository();
+            var jobSeeker = seeker.JobSeekers().Find(model => model.SeekerId == id);
+            var edu = seeker.GetEducationDetails(id);
+            var viewModel = new JobSeekerProfile
+            {
+                JobSeekerDetails = jobSeeker,
+                EducationDetails = edu
+            };
+            return View(viewModel);
+        }
+
     }
 }

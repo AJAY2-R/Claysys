@@ -85,6 +85,8 @@ namespace JobPortal.Repository
                 
                 con.Open();
                 string res = Convert.ToString(com.ExecuteScalar());
+                if (res == "0")
+                    return false;
                 return seeker.VerifyPassword(res);
             }
             finally { con.Close(); }
@@ -216,5 +218,78 @@ namespace JobPortal.Repository
             finally { con.Close(); }
         }
 
+        /// <summary>
+        /// Display job application submited by the seeker
+        /// </summary>
+        /// <param name="SeekerId"></param>
+        /// <returns></returns>
+        public List<JobApplication> GetJobApplications(int SeekerId)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_ReadJobApplicationSeeker", con);
+                List<JobApplication> jobApplications = new List<JobApplication>();
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@SeekerId", SeekerId);
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    jobApplications.Add(new JobApplication()
+                    {
+                        JobApplicationID = Convert.ToInt32(dr["ApplicationID"]),
+                        JobId = Convert.ToInt32(dr["JobId"]),
+                        SeekerId = Convert.ToInt32(dr["SeekerID"]),
+                        ApplicationDate = Convert.ToDateTime(dr["ApplicationDate"]),
+                        Status = Convert.ToString(dr["Status"])
+                    });
+                }
+                return jobApplications;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// User visited the job
+        /// </summary>
+        public bool VisitJob(ViewJob obj)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_CreateJobView", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@JobId", obj.JobId);
+                com.Parameters.AddWithValue("@SeekerId", obj.SeekerId);
+                com.Parameters.AddWithValue("@ViewDate", DateTime.Now);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i > 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Save and delete job bookmarks
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Bookmark(Bookmark obj)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_Bookmark", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@JobId", obj.JobId);
+                com.Parameters.AddWithValue("@SeekerId", obj.SeekerId);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i > 0;
+            }
+            finally { con.Close(); }
+        }
     }
 }

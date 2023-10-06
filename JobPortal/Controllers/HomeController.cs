@@ -182,6 +182,10 @@ namespace JobPortal.Controllers
             }
 
         }
+        /// <summary>
+        /// Display all the jobs
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Jobs()
         {
 

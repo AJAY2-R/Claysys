@@ -16,31 +16,8 @@
             <img src="~/Content/Static/claysys-logo.png">
         </div>
         <div class="cus-navbar">
-            <div class="cus-dropdown">
-                <button class="cus-dropbtn">Jobs</button>
-                <div class="cus-dropdown-content">
-                    <a href="#service1">Service 1</a>
-                    <a href="#service2">Service 2</a>
-                    <a href="#service3">Service 3</a>
-                </div>
-            </div>
-            @Html.ActionLink("Jobs","Jobs","JobSeeker")
-            <div class="cus-dropdown">
-                <button class="cus-dropbtn">Comapanies</button>
-                <div class="cus-dropdown-content">
-                    <a href="#service1">Service 1</a>
-                    <a href="#service2">Service 2</a>
-                    <a href="#service3">Service 3</a>
-                </div>
-            </div>
-            <div class="cus-dropdown">
-                <button class="cus-dropbtn">Services</button>
-                <div class="cus-dropdown-content">
-                    <a href="#service1">Service 1</a>
-                    <a href="#service2">Service 2</a>
-                    <a href="#service3">Service 3</a>
-                </div>
-            </div>
+            @Html.ActionLink("Jobs", "Jobs", "JobSeeker")
+            @Html.ActionLink("Applied Jobs", "AppliedJobs", "JobSeeker")
             <a href="@Url.Action("JobSeekerProfile","JobSeeker")" class="btn-login">Profile</a>
         </div>
     </navbar>
