@@ -1,0 +1,46 @@
+﻿@model JobPortal.Models.EmployerModel
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/EmployerLayout.cshtml";
+}
+
+<h2>View</h2>
+
+<form action="@Url.Action("UpdateProfile","Employer")"  method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="CompanyName">Company Name</label>
+        <input type="text" id="CompanyName" name="CompanyName" class="form-control" value="@Model.CompanyName" />
+    </div>
+
+    <div class="form-group">
+        <label for="OfficialEmail">Official Email</label>
+        <input type="email" id="OfficialEmail" name="OfficialEmail" class="form-control" value="@Model.OfficialEmail" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="ContactPhone">Contact Phone</label>
+        <input type="tel" id="ContactPhone" name="ContactPhone" class="form-control" value="@Model.ContactPhone" />
+    </div>
+
+    <div class="form-group">
+        <label for="Website">Website</label>
+        <input type="url" id="Website" name="Website" class="form-control" value="@Model.Website" />
+    </div>
+
+    <div class="form-group">
+        <label for="Name">Full Name</label>
+        <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Designation">Designation</label>
+        <input type="text" id="Designation" name="Designation" class="form-control" value="@Model.Designation" />
+    </div>
+    <input type="file" accept=".png,.jpg" name="uploadedLogo" />
+    <input type="submit" value="Submit"/>
+</form>

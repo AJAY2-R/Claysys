@@ -32,7 +32,30 @@ namespace JobPortal.Controllers
             };
             return View(viewModel);
         }
+        public ActionResult UpdateProfile()
+        {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            var jobSeeker = repo.JobSeekers().Find(model => model.SeekerId == (int)Session["SeekerId"]);
+            return View(jobSeeker);
 
+        }
+        [HttpPost]
+        public ActionResult UpdateProfile(JobSeekerModel jobSeeker,HttpPostedFileBase imageUpload)
+        {
+            try
+            {
+                JobSeekerRepository repo = new JobSeekerRepository();
+                if (repo.JobSeekerUpdate(jobSeeker, imageUpload,Convert.ToInt32(Session["SeekerId"])))
+                {
+                    TempData["Message"] = "Updated";
+                }
+                return RedirectToAction("JobSeekerProfile");
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+            
+        }
         public ActionResult AddEducationDetails()
         {
             return View();
@@ -175,12 +198,47 @@ namespace JobPortal.Controllers
             return View(repo.GetJobDetails().Find(model => model.JobID == id));  
 
         }
-
+        /// <summary>
+        /// View applied jobs and check the status
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AppliedJobs()
         {
             JobSeekerRepository repo = new JobSeekerRepository();
             int id = Convert.ToInt32(Session["SeekerId"]);
             return View(repo.GetJobApplications(id));
+        }
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Change password job seeker
+        /// </summary>
+        /// <param name="oldPassword">Old password</param>
+        /// <param name="newPassword">New password</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ChangePassword(string oldPassword, string newPassword)
+        {
+            try
+            {
+                JobSeekerRepository repo = new JobSeekerRepository();
+                if (repo.ChangePassword(oldPassword, newPassword, Convert.ToInt32(Session["SeekerId"])))
+                {
+                    TempData["Message"] = "Password changed";
+                }
+                else
+                {
+                    TempData["Message"] = "Wrong password";
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
         }
     }
 }

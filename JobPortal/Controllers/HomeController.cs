@@ -63,6 +63,45 @@ namespace JobPortal.Controllers
         }
 
         /// <summary>
+        /// Login form for - Admin,JobSeeker,Employer
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(Login obj)
+        {
+            PublicRepository repo = new PublicRepository(); 
+            string result = repo.Login(obj);
+            if(result == "JobSeeker")
+            {
+                JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+                var details = jobSeekerRepository.JobSeekers().Find(model => model.Username == obj.Username);
+                Session["SeekerId"] = details.SeekerId;
+                return RedirectToAction("Index", "JobSeeker");
+            }
+            else if (result == "Employer")
+            {
+                EmployerRepository employerRepository = new EmployerRepository();
+                var details = employerRepository.Employers().Find(model => model.Username == obj.Username);
+                Session["EmployerId"] = details.EmployerID;
+                return RedirectToAction("Index", "Employer");
+            }
+            else if (result == "Admin")
+            {
+                Session["Admin"] = obj.Username;
+                //Roles.AddUserToRole(obj.Username, "Admin");
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                TempData["Message"]=result;
+                return View();
+            }
+        }
+        /// <summary>
         /// About page
         /// </summary>
         /// <returns></returns>
@@ -77,41 +116,6 @@ namespace JobPortal.Controllers
         public ActionResult ContactUs()
         {
             return View();
-        }
-
-        /// <summary>
-        /// Job seeker login page
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult JobSeekerLogin()
-        {
-            ModelState.Clear();
-            return View();
-        }
-        /// <summary>
-        /// Job seeker login process
-        /// </summary>
-        /// <param name="seeker">Job seeker model instance with Username and password </param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AllowAnonymous]
-        public ActionResult JobSeekerLogin([Bind(Include ="Username,Password")]JobSeekerModel seeker )
-        {
-            JobSeekerRepository repo = new JobSeekerRepository();
-            if (repo.JobSeekerLogin(seeker))
-            {
-                var details = repo.JobSeekers().Find(model=>model.Username == seeker.Username);
-
-                Session["SeekerId"] = details.SeekerId;
-                return RedirectToAction("Index","JobSeeker");
-            }
-            else
-            {
-                TempData["Message"] = "Username or password error ";
-                return View();
-            }
-           
         }
 
         /// <summary>
@@ -150,38 +154,7 @@ namespace JobPortal.Controllers
                 return View();
             }
         }
-        public ActionResult EmployerLogin()
-        {
-            ModelState.Clear();
-            return View();
-        }
-        /// <summary>
-        /// Employer login process
-        /// </summary>
-        /// <param name="formCollection"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EmployerLogin(FormCollection formCollection)
-        {
 
-            string Email = formCollection["Email"];
-            string Password = formCollection["Password"];
-            EmployerRepository emp = new EmployerRepository();
-            if (emp.EmployerLogin(Email, Password))
-            {
-                var details = emp.Employers().Find(model => model.Email == Email);
-                Session["EmployerId"] = details.EmployerID;
-
-                return RedirectToAction("Index", "Employer");
-            }
-            else
-            {
-                TempData["Message"] = "Username or password error ";
-                return View();
-            }
-
-        }
         /// <summary>
         /// Display all the jobs
         /// </summary>

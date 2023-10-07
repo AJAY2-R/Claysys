@@ -1,7 +1,9 @@
 ﻿using JobPortal.Models;
 using JobPortal.Repository;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace JobPortal.Controllers
@@ -14,7 +16,10 @@ namespace JobPortal.Controllers
             var Employer = emp.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"]));
             return View(Employer);
         }
-
+        /// <summary>
+        /// Add job vacancy
+        /// </summary>
+        /// <returns></returns>
         public ActionResult AddJobVacancy()
         {
             PublicRepository repo = new PublicRepository();
@@ -36,6 +41,38 @@ namespace JobPortal.Controllers
                 return View();
             }
             catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// View profile
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ViewProfile()
+        {
+            EmployerRepository repo = new EmployerRepository();
+            return View(repo.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
+        }
+        public ActionResult UpdateProfile()
+        {
+            EmployerRepository repo = new EmployerRepository();
+            return View(repo.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProfile(EmployerModel employer, HttpPostedFileBase uploadedLogo )
+        {
+            try
+            {
+                EmployerRepository repo = new EmployerRepository();
+                if(repo.UpdateEmployer(employer, uploadedLogo, Convert.ToInt32(Session["EmployerId"])))
+                {
+                    TempData["Message"] = "Updated";
+                }
+                return RedirectToAction("ViewProfile");
+            }
+            catch(Exception ex)
             {
                 return View(ex.Message);
             }
@@ -138,7 +175,11 @@ namespace JobPortal.Controllers
             }
 
         }
-
+        /// <summary>
+        /// View applicant details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult JobSeekerProfile(int id)
         {
             JobSeekerRepository seeker = new JobSeekerRepository();
@@ -151,6 +192,35 @@ namespace JobPortal.Controllers
             };
             return View(viewModel);
         }
-
+        /// <summary>
+        /// Employer chnage password 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ChangePassword(string oldPassword, string newPassword)
+        {
+            try
+            {
+                EmployerRepository repo = new EmployerRepository();
+                if (repo.ChangePassword(oldPassword, newPassword, Convert.ToInt32(Session["EmployerId"])))
+                {
+                    TempData["Message"] = "Password changed";
+                }
+                else
+                {
+                    TempData["Message"] = "Wrong password";
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
     }
 }

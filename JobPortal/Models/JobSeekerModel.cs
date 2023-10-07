@@ -60,15 +60,6 @@ namespace JobPortal.Models
         {
             Password = BCrypt.Net.BCrypt.HashPassword(password);
         }
-        /// <summary>
-        /// Password Encryption
-        /// </summary>
-        /// <param name="password">Password fetched from the database</param>
-        /// <returns></returns>
-        public bool VerifyPassword(string password)
-        {
-            return BCrypt.Net.BCrypt.Verify( Password, password);
-        }
     }
     /// <summary>
     /// Skills Model
@@ -122,20 +113,20 @@ namespace JobPortal.Models
         public JobSeekerModel JobSeekerDetails { get; set; }
         public List<EducationDetails> EducationDetails { get; set; }
     }
+
     public class JobDetails
     {
-        [Key]
         public int JobID { get; set; }
         public int EmployerID { get; set; }
         public string JobTitle { get; set; }
         public string Description { get; set; }
+        public int CategoryID { get; set; }
         public string CategoryName { get; set; }
         public string Location { get; set; }
         public decimal Salary { get; set; }
         public string EmploymentType { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
-        [DataType(DataType.Date)]
         public DateTime ApplicationDeadline { get; set; }
+        public bool IsPublished { get; set; }
         public string CompanyName { get; set; }
         public string OfficialEmail { get; set; }
         public string Email { get; set; }
@@ -144,7 +135,10 @@ namespace JobPortal.Models
         public string EmployerName { get; set; }
         public string Designation { get; set; }
         public byte[] CompanyLogo { get; set; }
+        public int NumberOfApplications { get; set; }
+        public int NumberOfViews { get; set; }
     }
+
     /// <summary>
     /// View status of the job
     /// </summary>

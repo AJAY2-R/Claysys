@@ -1,10 +1,10 @@
 ﻿@model JobPortal.Models.JobSeekerProfile
 @{
-    ViewBag.Title = "JobSeekerDetailsProfile";
-    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/EmployerLayout.cshtml";
 }
 
-<h2> Profile</h2>
+<h2>JobSeekerDetails Profile</h2>
 
 <div>
     <h4>@Model.JobSeekerDetails.FirstName @Model.JobSeekerDetails.LastName</h4>
@@ -34,7 +34,7 @@
 
     </dl>
 </div>
-
+<img src="data:jpg/png;base64,@Convert.ToBase64String(Model.JobSeekerDetails.Image)" width="100" height="100" />
 <h4>Education Details</h4>
 <hr />
 
@@ -44,3 +44,4 @@
         <li>@detail.Major - @detail.Degree</li>
     }
 </ul>
+@Html.ActionLink("Update Profile","UpdateProfile")

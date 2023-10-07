@@ -11,10 +11,8 @@
 <div>
     <hr />
     <dl class="dl-horizontal">
-        <dd>
-            @Html.DisplayFor(model => model.EmployerID)
-        </dd>
-
+        Views : @Model.NumberOfViews
+        Applications: @Model.NumberOfApplications
         <dt>
             @Html.DisplayNameFor(model => model.JobTitle)
         </dt>

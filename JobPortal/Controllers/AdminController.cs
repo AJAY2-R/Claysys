@@ -11,9 +11,7 @@ namespace JobPortal.Controllers
 {
     
     public class AdminController : Controller
-    {
-
-        [Authorize]
+    {  
         public ActionResult Index()
         {
             return View();
@@ -278,6 +276,58 @@ namespace JobPortal.Controllers
             var vacency = repo.GetJobVacancies();
             return View(vacency);
 
+        }
+
+        /// <summary>
+        /// Add admin
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AddAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddAdmin(Admin admin)
+        {
+            AdminRepository repo = new AdminRepository();
+            try
+            {
+                if (repo.AddAdmin(admin)) {
+                    TempData["Message"] = "Admin added successfully"
+;                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex) { 
+            return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Admin chnage password 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ChangePassword(string oldPassword,string newPassword)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.ChangePassword(oldPassword, newPassword, Convert.ToString(Session["Admin"]))){
+                    TempData["Message"] = "Password changed";
+                }
+                else
+                {
+                    TempData["Message"] = "Wrong password";
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }catch(Exception ex) {
+                return View(ex.Message);
+            }
         }
     }
 }

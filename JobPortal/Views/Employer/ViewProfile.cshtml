@@ -1,0 +1,99 @@
+﻿@model JobPortal.Models.EmployerModel
+
+@{
+    ViewBag.Title = "ViewProfile";
+    Layout = "~/Views/Shared/EmployerLayout.cshtml";
+}
+
+<h2>ViewProfile</h2>
+
+<div>
+    <h4>EmployerModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficialEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficialEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContactPhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Website)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <img src="data:jpg/image;base64,@Convert.ToBase64String(Model.CompanyLogo)" alt="Student Image" class="card" />
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "UpdateProfile","Employer" )
+    @Html.ActionLink("Back to List", "Index")
+</p>

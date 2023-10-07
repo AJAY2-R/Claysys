@@ -21,14 +21,14 @@ namespace JobPortal.Models
 
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
-        [Required(ErrorMessage ="Enter the phone number")]
+        [Required(ErrorMessage = "Enter the phone number")]
         [Phone(ErrorMessage = "Invalid Phone Number")]
         public string ContactPhone { get; set; }
 
-        [Required(ErrorMessage ="Enter the url ")]
+        [Required(ErrorMessage = "Enter the url ")]
         [Url(ErrorMessage = "Invalid Website URL")]
         public string Website { get; set; }
-        [Display(Name ="Full name")]
+        [Display(Name = "Full name")]
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         public string Name { get; set; }
@@ -36,11 +36,12 @@ namespace JobPortal.Models
         [Required(ErrorMessage = "Designation is required")]
         [StringLength(50, ErrorMessage = "Designation cannot exceed 50 characters")]
         public string Designation { get; set; }
-        [Required(ErrorMessage ="Password is required")]
+        [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
+        public string Username { get; set; }
         public string Password { get; set; }
         public byte[] CompanyLogo { get; set; }
-        public string Status { get; set; }  
+        public string Status { get; set; }
         public void SetPassword(string password)
         {
             Password = BCrypt.Net.BCrypt.HashPassword(password);
@@ -50,7 +51,18 @@ namespace JobPortal.Models
             return BCrypt.Net.BCrypt.Verify(password, Password);
         }
     }
-
+    /// <summary>
+    /// Login model  
+    /// </summary>
+    public class Login
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool VerifyPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.Verify(Password, password);
+        }
+    }
     /// <summary>
     /// Category model
     /// </summary>
@@ -59,7 +71,7 @@ namespace JobPortal.Models
         [Key]
         public int CategoryId { get; set; }
 
-        [Required(ErrorMessage ="Enter the category ")]
+        [Required(ErrorMessage = "Enter the category ")]
         public string CategoryName { get; set; }
     }
     /// <summary>
@@ -81,5 +93,17 @@ namespace JobPortal.Models
         public DateTime ApplicationDeadline { get; set; }
         public bool IsPublished { get; set; }
     }
+    /// <summary>
+    /// Admin model
+    /// </summary>
+    public class Admin{
+        [Key]
+        public int AdminID { get; set; }
+        public string Name { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Password { get; set; }
 
+    }
 }
