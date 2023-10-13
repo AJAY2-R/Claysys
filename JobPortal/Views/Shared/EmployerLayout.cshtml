@@ -13,21 +13,22 @@
 <body>
     <navbar>
         <div class="cus-navbar-logo">
-            <img src="~/Content/Static/claysys-logo.png">
+            <a href="/Employer"><img src="~/Content/Static/claysys-logo.png"></a>
         </div>
         <div class="cus-navbar">
             <div class="cus-dropdown">
                 <button class="cus-dropbtn">Jobs</button>
                 <div class="cus-dropdown-content">
-                    @Html.ActionLink("Posted vacancies","Vacancies","Employer")
+                    @Html.ActionLink("Add job ", "AddJobVacancy", "Employer")
+                    @Html.ActionLink("Posted jobs", "Vacancies", "Employer")
                 </div>
-            </div>>
-
+            </div>
+            @Html.ActionLink("Messages","ChatList","Employer")
             <div class="cus-dropdown">
-                <button class="cus-dropbtn">Profile</button>
+                <button class="cus-dropbtn"><img src="data:png/jpg; base64,@Session["CompanyLogo"]" class="rounded-circle" width="50px" height="50px" /></button>
                 <div class="cus-dropdown-content">
-                    <a href="@Url.Action("ViewProfile","Employer")">View Profile</a>
-                    <a href="#service3">Logout</a>
+                    <a href="@Url.Action("ViewProfile","Employer")">Profile</a>
+                    <a href="@Url.Action("Index","Home")">Logout</a>
                 </div>
             </div>
         </div>
@@ -52,7 +53,6 @@
                 <svg class="bi me-2" width="40" height="32"><img src="~/Content/Static/claysys-logo.png"></svg>
 
             </a>
-            <p class="bi me-2">Connect with us</p>
         </div>
         <div class="col">
 

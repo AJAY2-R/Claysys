@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Web;
 
 namespace JobPortal.Repository
@@ -48,6 +46,7 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@ContactPhone", emp.ContactPhone);
                 com.Parameters.AddWithValue("@Website", emp.Website);
                 com.Parameters.AddWithValue("@Name", emp.Name);
+                com.Parameters.AddWithValue("@Username", emp.Username);
                 com.Parameters.AddWithValue("@Designation", emp.Designation);
                 com.Parameters.AddWithValue("@CompanyLogo", emp.CompanyLogo);
                 com.Parameters.AddWithValue("@Password", emp.Password);
@@ -58,27 +57,44 @@ namespace JobPortal.Repository
             finally { con.Close(); }
         }
         /// <summary>
-        /// Employer login 
+        /// Update employer deatails
         /// </summary>
-        /// <param name="Email"></param>
-        /// <param name="password"></param>
+        /// <param name="employer"></param>
+        /// <param name="uploadLogo"></param>
         /// <returns></returns>
-        public bool EmployerLogin(string email, string password)
+        public bool UpdateEmployer(EmployerModel emp, HttpPostedFileBase uploadedLogo,int employerId)
         {
-            try
-            {
+            try {
                 connection();
-                SqlCommand com = new SqlCommand("SP_EmployerLogin", con);
-                com.CommandType = CommandType.StoredProcedure;
-                com.Parameters.AddWithValue("@Email", email);
-                con.Open();
-                string res = Convert.ToString(com.ExecuteScalar());
-                if (res == "0") {
-                return false;
+                if (uploadedLogo != null)
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(uploadedLogo.InputStream))
+                    {
+                        emp.CompanyLogo = binaryReader.ReadBytes(uploadedLogo.ContentLength);
+                    }
                 }
-                return BCrypt.Net.BCrypt.Verify(password, res);
+                else
+                {
+                    emp.CompanyLogo = null;
+                }
+
+                SqlCommand com = new SqlCommand("SP_UpdateEmployer", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerID", employerId);
+                com.Parameters.AddWithValue("@CompanyName", emp.CompanyName);
+                com.Parameters.AddWithValue("@OfficialEmail", emp.OfficialEmail);
+                com.Parameters.AddWithValue("@Email", emp.Email);
+                com.Parameters.AddWithValue("@ContactPhone", emp.ContactPhone);
+                com.Parameters.AddWithValue("@Website", emp.Website);
+                com.Parameters.AddWithValue("@Name", emp.Name);
+                com.Parameters.AddWithValue("@Designation", emp.Designation);
+                com.Parameters.AddWithValue("@CompanyLogo", emp.CompanyLogo);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i > 0;
             }
             finally { con.Close(); }
+
         }
         /// <summary>
         /// Details of all employer 
@@ -110,7 +126,8 @@ namespace JobPortal.Repository
                         Name = Convert.ToString(dr["Name"]),
                         Designation = Convert.ToString(dr["Designation"]),
                         CompanyLogo = (byte[])dr["CompanyLogo"],
-                        Status = Convert.ToString(dr["Status"])
+                        Status = Convert.ToString(dr["Status"]),
+                        Username = Convert.ToString(dr["Username"])
                     });
                 }
 
@@ -143,6 +160,33 @@ namespace JobPortal.Repository
                 com.Parameters.AddWithValue("@Salary", obj.Salary);
                 com.Parameters.AddWithValue("@EmploymentType", obj.EmploymentType);
                 com.Parameters.AddWithValue("@ApplicationDeadline", obj.ApplicationDeadline);
+                con.Open();
+                int i = com.ExecuteNonQuery();
+                return i > 0;
+            }
+            finally { con.Close(); }
+        }
+        /// <summary>
+        /// Update job vacancy
+        /// </summary>
+        /// <param name="obj">job vacancy id</param>
+        /// <returns></returns>
+        public bool UpdateJobVacancy(JobVacancy obj)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_UpdateJobVacancy", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@VacancyID", obj.VacancyID);
+                com.Parameters.AddWithValue("@JobTitle", obj.JobTitle);
+                com.Parameters.AddWithValue("@Description", obj.Description);
+                com.Parameters.AddWithValue("@CategoryID", obj.CategoryID);
+                com.Parameters.AddWithValue("@Location", obj.Location);
+                com.Parameters.AddWithValue("@Salary", obj.Salary);
+                com.Parameters.AddWithValue("@EmploymentType", obj.EmploymentType);
+                com.Parameters.AddWithValue("@ApplicationDeadline", obj.ApplicationDeadline);
+                com.Parameters.AddWithValue("@IsPublished", obj.IsPublished);
                 con.Open();
                 int i = com.ExecuteNonQuery();
                 return i > 0;
@@ -233,11 +277,81 @@ namespace JobPortal.Repository
                         JobId = Convert.ToInt32(dr["JobId"]),
                         SeekerId = Convert.ToInt32(dr["SeekerID"]),
                         ApplicationDate = Convert.ToDateTime(dr["ApplicationDate"]),
-                        Status = Convert.ToString(dr["Status"])
+                        Status = Convert.ToString(dr["Status"]),
+                        SeekerName = Convert.ToString(dr["FirstName"])
                     });
                 }
                 return jobApplications;
             }finally { con.Close(); }
+        }
+
+        /// <summary>
+        /// Change password employer
+        /// </summary>
+        /// <param name="oldPassword">Old password</param>
+        /// <param name="newPassword">New Password</param>
+        /// <param name="employerId">Employer id</param>
+        /// <returns></returns>
+        public bool ChangePassword(string oldPassword, string newPassword, int employerId)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_ReadEmployerPassword", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerId", employerId);
+                con.Open();
+                string password = Convert.ToString(com.ExecuteScalar());
+                if (BCrypt.Net.BCrypt.Verify(oldPassword, password))
+                {
+                    com = new SqlCommand("SP_ChangeEmployerPassword", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@EmployerId",employerId);
+                    newPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                    com.Parameters.AddWithValue("@NewPassword", newPassword);
+                    int i = com.ExecuteNonQuery();
+                    return i > 0;
+                }
+                else
+                    return false;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        /// <summary>
+        /// Chat list of employer
+        /// </summary>
+        /// <param name="employerId">Employer id</param>
+        /// <returns></returns>
+        public List<ChatList> ChatList(int employerId)
+        {
+            try
+            {
+                connection();
+                List<ChatList> chats = new List<ChatList>();
+                SqlCommand com = new SqlCommand("SP_ChatListEmployer", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@EmployerID", employerId);
+                con.Open();
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    chats.Add(new ChatList
+                    {
+                        SeekerID = Convert.ToInt32(dr["SeekerID"]),
+                        EmployerID = Convert.ToInt32(dr["EmployerID"]),
+                        ChatID = Convert.ToInt32(dr["ChatID"]),
+                        SeekerName = dr["SeekerName"].ToString(),
+                        CompanyName = dr["CompanyName"].ToString(),
+                    });
+                }
+                return chats;
+            }
+            finally { con.Close(); }
         }
     }
 }

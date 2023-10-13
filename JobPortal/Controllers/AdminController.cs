@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,12 +10,25 @@ using JobPortal.Repository;
 
 namespace JobPortal.Controllers
 {
-    
+    [Authorize]
     public class AdminController : Controller
     {  
+        /// <summary>
+        /// Admin index page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                var jobs = repo.GetJobDetails();
+                return View(jobs);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
         }
         [AllowAnonymous]
         public ActionResult Login()
@@ -127,11 +141,124 @@ namespace JobPortal.Controllers
                 if (repo.EditSkill(obj, id))
                 {
                     TempData["Message"] = "Skill Updated";
-                    return RedirectToAction("DisplaySkills", "Admin");
+                    return RedirectToAction("Skills", "Admin");
                    
                 }
                 return View();
             }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        public ActionResult UpdateCategory(int id)
+        {
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                return View(repo.DisplayCategories().Find(cat => cat.CategoryId == id));
+             }catch(Exception ex)
+            {
+                return View(ex.Message) ;
+            }
+
+        }
+        /// <summary>
+        /// Edit category
+        /// </summary>
+        /// <param name="obj">Category object</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateCategory(Category obj)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.UpdateCategory(obj))
+                {
+                    TempData["Message"] = "Category Updated";
+                }
+                return RedirectToAction("Categories", "Admin");
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Delete skill
+        /// </summary>
+        /// <param name="id">Skill id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult DeleteSkill(int id)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.DeleteSkill(id))
+                {
+                    TempData["Message"] = "Skill deleted";
+                }
+                return RedirectToAction("Skills");
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Delete category
+        /// </summary>
+        /// <param name="id">Skill id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult DeleteCategory(int id)
+        {
+            try
+            {
+                AdminRepository repo = new AdminRepository();
+                if (repo.DeleteCategory(id))
+                {
+                    TempData["Message"] = "Category deleted";
+                }
+                return RedirectToAction("Categories");
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Get details of the jobs
+        /// </summary>
+        /// <param name="id">Job id</param>
+        /// <returns></returns>
+        public ActionResult JobDetails(int id)
+        {
+            PublicRepository publicRepository = new PublicRepository();
+            var jobDetails = publicRepository.GetJobDetails().Find(model => model.JobID == id);
+            return View(jobDetails);
+
+        }
+        /// <summary>
+        /// Filter the job details based on the search string
+        /// </summary>
+        /// <param name="search">Search string</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Jobs(string search)
+        {
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                var jobs = repo.GetJobDetails();
+                if (!string.IsNullOrEmpty(search))
+                {
+                    jobs = jobs.Where(job => job.JobTitle.Contains(search) || job.CategoryName.Contains(search) || job.Location.Contains(search) && job.ApplicationDeadline > DateTime.Now && job.IsPublished).ToList();
+                }
+
+                return View(jobs);
+            }
+            catch (Exception ex)
             {
                 return View(ex.Message);
             }
@@ -216,7 +343,7 @@ namespace JobPortal.Controllers
                 if (repo.EmployerApprove(id))
                 {
                     TempData["Message"] = "Employer approved..";
-                    return RedirectToAction("VerifyEmployer");
+                    return Redirect(Request.UrlReferrer.ToString());
                 }
                 return View();
             }catch(Exception ex)
@@ -238,7 +365,7 @@ namespace JobPortal.Controllers
                 if (repo.EmployerReject(id))
                 {
                     TempData["Message"] = "Employer rejected..";
-                    return RedirectToAction("VerifyEmployer");
+                    return Redirect(Request.UrlReferrer.ToString());
                 }
                 return View();
             }
@@ -271,10 +398,17 @@ namespace JobPortal.Controllers
         /// <returns></returns>
         public ActionResult Jobs()
         {
-
-            PublicRepository repo = new PublicRepository();
-            var vacency = repo.GetJobVacancies();
-            return View(vacency);
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                DateTime currentDate = DateTime.Now;
+                var jobs = repo.GetJobDetails().Where(job => job.ApplicationDeadline >= currentDate && job.IsPublished).ToList();
+                return View(jobs);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
 
         }
 
@@ -328,6 +462,70 @@ namespace JobPortal.Controllers
             }catch(Exception ex) {
                 return View(ex.Message);
             }
+        }
+        /// <summary>
+        /// Check username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult CheckUsername(string username)
+        {
+            try
+            {
+                PublicRepository publicRepository = new PublicRepository();
+
+                if (!publicRepository.CheckUsername(username))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(202);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// List the job viewers
+        /// </summary>
+        /// <param name="id">Job id</param>
+        /// <returns></returns>
+        public ActionResult JobViews(int id)
+        {
+            AdminRepository adminRepository = new AdminRepository();
+            try
+            {
+                return View(adminRepository.JobViewers(id));
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// View applicant details
+        /// </summary>
+        /// <param name="id">Job seeker id</param>
+        /// <returns></returns>
+        public ActionResult JobSeekerProfile(int id)
+        {
+            JobSeekerRepository seeker = new JobSeekerRepository();
+            PublicRepository repo = new PublicRepository();
+            var jobSeeker = seeker.JobSeekers().Find(model => model.SeekerId == id);
+            var edu = seeker.GetEducationDetails(id);
+            var userSkills = repo.JobSeekerSkills(id);
+            var viewModel = new JobSeekerProfile
+            {
+                JobSeekerDetails = jobSeeker,
+                EducationDetails = edu,
+                Skills = userSkills
+            };
+            return View(viewModel);
+        }
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

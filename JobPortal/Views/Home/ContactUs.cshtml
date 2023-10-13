@@ -3,33 +3,43 @@
     ViewBag.Title = "ContactUs";
     Layout = "~/Views/Shared/MainLayout.cshtml";
 }
-
-<h2>ContactUs</h2>
-
-<form style="width: 40%; display: inline-block; text-align: left;" onsubmit="return validateContactForm()">
-    <div class="form-group">
-        <input type="text" name="fname" placeholder="First name" id="FirstName" class="form-control" onfocusout="validateFname(this)">
-        <span id="error-fname" class="error-msg"></span>
+<style>
+    body {
+        background-image: url(https://images.unsplash.com/photo-1495312040802-a929cd14a6ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80);
+        
+        }
+</style>
+    <div class="card col-md-7 p-3 mt-4">
+        <h2>ContactUs</h2>
+        <form onsubmit="return validateContactForm()">
+            <div class="form-group mt-2">
+                <label for="FirstName">First name</label>
+                <input type="text" name="fname" placeholder="First name" id="FirstName" class="form-control" onfocusout="validateFname(this)">
+                <span id="error-fname" class="error-msg"></span>
+            </div>
+            <div class="form-group mt-2">
+                <div class="LastName">Last name</div>
+                <input type="text" name="lname" placeholder="Last name" id="LastName" class="form-control" onfocusout="validateLname(this)">
+                <span id="error-lname" class="error-msg"></span>
+            </div>
+            <div class="form-group mt-2">
+                <div class="PhoneNumber">Phone number</div>
+                <input type="number" name="phone" id="PhoneNumber" placeholder="Phone number" class="form-control" onfocusout="validatePhone(this)">
+                <span id="error-phone" class="error-msg"></span>
+            </div>
+            <div class="form-group mt-2">
+                <div class="Email">Email</div>
+                <input type="email" name="email" placeholder="Email address" id="Email" class="form-control" onfocusout="validateEmail(this)">
+                <span id="error-email" class="error-msg"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label for="message">Message</label>
+                <textarea id="message" rows="5" class="form-control" onfocusout="validateMessage(this)"></textarea>
+                <span id="error-message" class="error-msg"></span>
+            </div>
+            <div class="text-center mt-2">
+                <input type="submit" class="btn btn-primary">
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <input type="text" name="lname" placeholder="Last name" id="LastName" class="form-control"  onfocusout="validateLname(this)">
-        <span id="error-lname" class="error-msg"></span>
-    </div>
-    <div class="form-group">
-        <input type="number" name="phone" id="PhoneNumber" placeholder="Phone number" class="form-control"  onfocusout="validatePhone(this)">
-        <span id="error-phone" class="error-msg"></span>
-    </div>
-    <div class="form-group">
-        <input type="text" name="email" placeholder="Email address" id="Email" class="form-control"  onfocusout="validateEmail(this)">
-        <span id="error-email" class="error-msg"></span>
-    </div>
-    <div class="form-group">
-        <label for="message" >Message</label><br>
-        <textarea id="message" rows="10"  class="form-control"  onfocusout="validateMessage(this)">
-    
-                        </textarea>
-        <span id="error-message" class="error-msg"></span>
-    </div>
-    <center><input type="submit"  class="btn btn-primary"></center>
-</form>
 <script src="~/Scripts/MyScripts/script.js"></script>

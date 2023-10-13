@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BCrypt.Net;
 namespace JobPortal.Models
@@ -36,9 +37,10 @@ namespace JobPortal.Models
         [Required(ErrorMessage = "Designation is required")]
         [StringLength(50, ErrorMessage = "Designation cannot exceed 50 characters")]
         public string Designation { get; set; }
+        public string Username { get; set; }
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        public string Username { get; set; }
+
         public string Password { get; set; }
         public byte[] CompanyLogo { get; set; }
         public string Status { get; set; }
@@ -85,6 +87,7 @@ namespace JobPortal.Models
         public string JobTitle { get; set; }
         public string Description { get; set; }
         public int CategoryID { get; set; }
+        public string CategoryName { get; set; }    
         public string Location { get; set; }
         public decimal Salary { get; set; }
         public string EmploymentType { get; set; }
@@ -105,5 +108,25 @@ namespace JobPortal.Models
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
 
+    }
+    /// <summary>
+    /// Vacancy view model
+    /// </summary>
+    public class VacancyViewModel
+    {
+        public JobDetails JobVacancies { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+        public int Views { get; set; }
+    }
+    /// <summary>
+    /// Job Viewers
+    /// </summary>
+    public class JobViewers
+    {
+        public int ViewId { get; set; }
+        public string Username { get; set; }
+        public DateTime ViewDateTime { get; set; }
+        public int JobId { get; set; }
+        public int SeekerId { get; set; }
     }
 }

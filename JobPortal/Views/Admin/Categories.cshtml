@@ -5,30 +5,36 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h2>Categories</h2>
+<div class="d-flex justify-content-center mt-4">
+    <div class="col-md-6">
+        <h3>Categories</h3>
+        <p>
+            @Html.ActionLink("Create New", "AddCategory",null, new { @class = "btn btn-success" })
+        </p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                       Category
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "UpdateCategory", new { id = item.CategoryId }, new { @class = "btn btn-primary edit-link" })  |
+                            @Html.ActionLink("Delete", "DeleteCategory", new { id = item.CategoryId }, new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
 
-<p>
-    @Html.ActionLink("Create New", "AddCategory")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CategoryId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CategoryId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CategoryId })
-        </td>
-    </tr>
-}
-
-</table>
+        </table>
+    </div>
+</div>

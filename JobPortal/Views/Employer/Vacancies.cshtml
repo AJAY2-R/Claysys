@@ -1,82 +1,43 @@
-﻿@model IEnumerable<JobPortal.Models.JobVacancy>
+﻿@model IEnumerable<JobPortal.Models.JobDetails>
 
 @{
-    ViewBag.Title = "DisplayVacancy";
+    ViewBag.Title = "Posted jobs";
     Layout = "~/Views/Shared/EmployerLayout.cshtml";
 }
-
-<h2>DisplayVacancy</h2>
+<h2>Vacancy List</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Vacancy", "AddJobVacancy", "Employer", null, new { @class = "btn btn-success" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EmployerID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.JobTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Location)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Salary)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmploymentType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApplicationDeadline)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmployerID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Salary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmploymentType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationDeadline)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPublished)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.VacancyID }) |
-            @Html.ActionLink("Applicantions", "Applications", new { id=item.VacancyID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.VacancyID })
-        </td>
-    </tr>
-}
-
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Job id</th>
+            <th scope="col">Job title</th>
+            <th scope="col">Employment type</th>
+            <th scope="col">Application deadline</th>
+            <th scope="col">Published</th>
+            <th scope="col">Views</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.JobID)</td>
+                <td>@Html.DisplayFor(modelItem => item.JobTitle)</td>
+                <td>@Html.DisplayFor(modelItem => item.EmploymentType)</td>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationDeadline)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsPublished)</td>
+                <td>@Html.DisplayFor(modelItem=>item.NumberOfViews)</td> 
+                <td>
+                    @Html.ActionLink("View", "JobDetails", "Employer", new { id = item.JobID }, new { @class = "btn btn-dark btn-sm" }) |
+                    @Html.ActionLink("Applications", "Applications", "Employer", new { id = item.JobID }, new { @class = "btn btn-info btn-sm" }) |
+                    @Html.ActionLink("Edit", "UpdateVacancy", "Employer", new { id = item.JobID }, new { @class = "btn btn-primary btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

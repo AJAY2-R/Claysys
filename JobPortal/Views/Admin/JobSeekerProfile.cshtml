@@ -1,7 +1,7 @@
 ﻿@model JobPortal.Models.JobSeekerProfile
 @{
     ViewBag.Title = "Profile";
-    Layout = "~/Views/Shared/EmployerLayout.cshtml";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,11 +13,9 @@
                 @Model.JobSeekerDetails.FirstName @Model.JobSeekerDetails.LastName </a>
 
             </h3>
-            <h5>@Model.JobSeekerDetails.Username</h5>
-            <a href="@Url.Action("SendMessage", "Employer", new {id=Model.JobSeekerDetails.SeekerId})" class="chat-link" >Send message</a>
         </div>
     </div>
-    <div class="row mt-3">
+    <div class="row">
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12">

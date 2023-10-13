@@ -2,6 +2,7 @@
 using JobPortal.Repository;
 using Microsoft.Ajax.Utilities;
 using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,7 +15,12 @@ namespace JobPortal.Controllers
         // GET: JobSeeker
         public ActionResult Index()
         {
-            return View();
+            PublicRepository publicRepository = new PublicRepository();
+            var jobs = publicRepository.GetJobDetails();
+            JobSeekerRepository repo = new JobSeekerRepository();
+            int id = Convert.ToInt32(Session["SeekerId"]);
+            var applications = repo.GetJobApplications(id);
+            return View(new Index { JobApplications =applications,JobDetails=jobs});
         }
         /// <summary>
         /// Display profile of the job seeker
@@ -23,12 +29,20 @@ namespace JobPortal.Controllers
         public ActionResult JobSeekerProfile()
         {
             JobSeekerRepository seeker = new JobSeekerRepository();
-            var jobSeeker = seeker.JobSeekers().Find(model=>model.SeekerId == (int)Session["SeekerId"]);
-            var edu = seeker.GetEducationDetails((int)Session["SeekerId"]);
+            PublicRepository repo = new PublicRepository();
+            int seekerId = (int)Session["SeekerId"];
+            var jobSeeker = seeker.JobSeekers().Find(model => model.SeekerId == seekerId);
+            var edu = seeker.GetEducationDetails(seekerId);
+            var userSkills = repo.JobSeekerSkills(seekerId).ToList();
+            var userSkillsId = repo.JobSeekerSkills(seekerId).Select(js => js.SkillId).ToList();
+
+            var skills = repo.DisplaySkills().Where(skil => !userSkillsId.Contains(skil.SkillId)).ToList();
             var viewModel = new JobSeekerProfile
             {
                 JobSeekerDetails = jobSeeker,
-                EducationDetails = edu
+                EducationDetails = edu,
+                Skills = userSkills,
+                AllSkills = skills
             };
             return View(viewModel);
         }
@@ -39,23 +53,30 @@ namespace JobPortal.Controllers
             return View(jobSeeker);
 
         }
+        /// <summary>
+        /// Update profile job seeker
+        /// </summary>
+        /// <param name="jobSeeker">Job seeker instance</param>
+        /// <param name="imageUpload">Uploaded image</param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult UpdateProfile(JobSeekerModel jobSeeker,HttpPostedFileBase imageUpload)
+        public ActionResult UpdateProfile(JobSeekerModel jobSeeker, HttpPostedFileBase imageUpload)
         {
             try
             {
                 JobSeekerRepository repo = new JobSeekerRepository();
-                if (repo.JobSeekerUpdate(jobSeeker, imageUpload,Convert.ToInt32(Session["SeekerId"])))
+                if (repo.JobSeekerUpdate(jobSeeker, imageUpload, Convert.ToInt32(Session["SeekerId"])))
                 {
                     TempData["Message"] = "Updated";
                 }
                 return RedirectToAction("JobSeekerProfile");
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return View(ex.Message);
             }
-            
+
         }
+
         public ActionResult AddEducationDetails()
         {
             return View();
@@ -70,19 +91,103 @@ namespace JobPortal.Controllers
         {
             try
             {
-                int id =(int)Session["SeekerId"];
+                int id = (int)Session["SeekerId"];
                 JobSeekerRepository seeker = new JobSeekerRepository();
                 if (seeker.AddEducationDetails(educationList, id))
-                   {
+                {
                     TempData["Message"] = "Added successfully";
                     return RedirectToAction("JobSeekerProfile");
                 }
-               return View();
+                return View();
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 TempData["Message"] = ex.Message;
                 return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdateResume(HttpPostedFileBase resumeFile)
+        {
+            try
+            {
+                JobSeekerRepository repo = new JobSeekerRepository();
+                if (repo.UpdateResume(resumeFile, Convert.ToInt32(Session["SeekerId"])))
+                {
+                    TempData["Message"] = "Resume Updated";
+                }
+               return RedirectToAction("JobSeekerProfile");
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+           
+        }
+        public ActionResult UpdateEducationDetails(int id)
+        {
+            JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+            var educationDetails = jobSeekerRepository.GetEducationDetails(Convert.ToInt32(Session["SeekerId"])).Find(ed => ed.EducationId == id);
+            return View(educationDetails);
+        }
+        /// <summary>
+        /// Update Education details
+        /// </summary>
+        /// <param name="educationDetails"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult UpdateEducationDetails(EducationDetails educationDetails) {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            try
+            {
+                if (repo.UpdateEducationDetails(educationDetails))
+                {
+                    TempData["Message"] = "Updated Successfully";
+                }
+                return RedirectToAction("JobSeekerProfile");
+            }catch(Exception ex) {
+                return View(ex.Message);
+
+            }
+        }
+        /// <summary>
+        /// Delete educational details
+        /// </summary>
+        /// <param name="id">Education id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult DeleteEducationDetails(int id)
+        {
+            JobSeekerRepository jobSeekerRepository=new JobSeekerRepository();
+            try {
+                if (jobSeekerRepository.DeleteEducationDetails(id))
+                {
+                    TempData["Message"] = "Deleted Successfully ";
+                }
+                return RedirectToAction("JobSeekerProfile");
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Delete Jobseeker skill id
+        /// </summary>
+        /// <param name="id">Skill id</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult DeleteJobSeekerSkill(int id)
+        {
+            try {
+                JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+                if (jobSeekerRepository.DeleteJobSeekerSkill((int)id))
+                {
+                    TempData["Message"] = "Deleted Successullly";
+                }
+                return RedirectToAction("JobSeekerProfile");
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
             }
         }
         /// <summary>
@@ -94,8 +199,9 @@ namespace JobPortal.Controllers
             try
             {
                 PublicRepository repo = new PublicRepository();
-                var vacency = repo.GetJobVacancies();
-                return View(vacency);
+                DateTime currentDate = DateTime.Now;
+                var jobs = repo.GetJobDetails().Where(job => job.ApplicationDeadline >= currentDate && job.IsPublished).ToList();
+                return View(jobs);
             }
             catch (Exception ex)
             {
@@ -103,6 +209,31 @@ namespace JobPortal.Controllers
             }
 
         }
+        /// <summary>
+        /// Filter the job details based on the search string
+        /// </summary>
+        /// <param name="search">Search string</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Jobs(string search)
+        {
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                var jobs = repo.GetJobDetails();
+                if (!string.IsNullOrEmpty(search))
+                {
+                    jobs = jobs.Where(job =>job.JobTitle.Contains(search) || job.CategoryName.Contains(search) ||job.Location.Contains(search) && job.ApplicationDeadline > DateTime.Now && job.IsPublished).ToList();
+                }
+
+                return View(jobs);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+
         [HttpGet]
         /// <summary>
         /// Apply for the job 
@@ -122,7 +253,7 @@ namespace JobPortal.Controllers
                 {
                     TempData["Message"] = "Applied Successfull";
                 }
-                return RedirectToAction("Jobs");
+                return Redirect(Request.UrlReferrer.ToString());
             }
             catch(Exception ex)
             {
@@ -194,8 +325,21 @@ namespace JobPortal.Controllers
         /// <returns></returns>
         public ActionResult JobDetails(int id)
         {
-            PublicRepository repo =new PublicRepository();
-            return View(repo.GetJobDetails().Find(model => model.JobID == id));  
+            int seekerId = Convert.ToInt32(Session["SeekerId"]);
+            PublicRepository publicRepository =new PublicRepository();
+            JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+            var jobDetails = publicRepository.GetJobDetails().Find(model => model.JobID == id);
+            if (jobDetails != null)
+            {
+                var bookmarks = jobSeekerRepository.GetBookmarks(seekerId);
+                var appliedJobs = jobSeekerRepository.GetJobApplications(seekerId);
+                bool isSaved = bookmarks.Any(jobId =>jobId.JobId == id);
+                bool isApplied = appliedJobs.Any(jobId => jobId.JobId == id);
+                ViewBag.isSaved = isSaved;
+                ViewBag.isApplied = isApplied;
+            }
+
+            return View(jobDetails);  
 
         }
         /// <summary>
@@ -233,9 +377,104 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Wrong password";
                     return View();
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("JobSeekerProfile");
             }
             catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        public ActionResult AddSkill()
+        {
+            PublicRepository repo = new PublicRepository();
+            int seekerId = Convert.ToInt32(Session["SeekerId"]);
+            var userSkills = repo.JobSeekerSkills(seekerId).Select(js => js.SkillId).ToList();
+            var skills = repo.DisplaySkills().Where(skill => !userSkills.Contains(skill.SkillId)).ToList();
+            return View(skills);
+        }
+
+        [HttpPost]
+        public ActionResult AddSkill(int[] SkillId)
+        {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            try {
+                foreach (int skillId in SkillId)
+                {
+                    if (repo.AddSkill(skillId, Convert.ToInt32(Session["SeekerId"])))
+                    {
+                        TempData["Message"] = "Skills added";
+                    }
+                }                              
+                return RedirectToAction("JobSeekerProfile");
+            }
+            catch (Exception ex) {
+                return View(ex.Message);      
+            }
+        }
+        /// <summary>
+        /// View saved jobs
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Bookmarks()
+        {
+            JobSeekerRepository repo = new JobSeekerRepository();
+            var bookmarks = repo.GetBookmarks(Convert.ToInt32(Session["SeekerId"]));
+            return View(bookmarks);
+        }
+        /// <summary>
+        /// Send message
+        /// </summary>
+        /// <param name="id">Employer id</param>
+        /// <returns></returns>
+        public ActionResult SendMessage(int id)
+        {
+            PublicRepository publicRepository   = new PublicRepository();
+            int seekerId = (int)Session["SeekerId"];
+            var chats = publicRepository.ReadMessage(seekerId, id);
+            if (chats.Count == 0)
+            {
+                EmployerRepository repo = new EmployerRepository();
+                var employer = repo.Employers().Find(model => model.EmployerID == id);
+                return View("Send-Message",employer);
+            }
+            return View(chats);
+        }
+        /// <summary>
+        /// Send message
+        /// </summary>
+        /// <param name="id">Employer id</param>
+        /// <param name="message">Message</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SendMessage(int id, string message) {
+            try
+            {
+                PublicRepository publicRepository = new PublicRepository();
+                int seekerId = (int)Session["SeekerId"];
+                char sender = 'J';
+                if (publicRepository.SendMessage(seekerId, id, message, sender))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(400);
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult(500);
+            }
+        }
+        /// <summary>
+        /// Chat list of the job seeker
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChatList()
+        {
+            try
+            {
+                JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+                int seekerId = (int)Session["SeekerId"];
+                return View(jobSeekerRepository.ChatList(seekerId));
+            }catch (Exception ex)
             {
                 return View(ex.Message);
             }

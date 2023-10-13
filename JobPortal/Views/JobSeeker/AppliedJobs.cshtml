@@ -4,38 +4,42 @@
     ViewBag.Title = "AppliedJobs";
     Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
 }
+@functions {
+    string GetStatusClass(string status)
+    {
+        switch (status)
+        {
+            case "Pending":
+                return "status-pending";
+            case "Read":
+                return "status-read";
+            case "Approved":
+                return "status-accept";
+            case "Rejected":
+                return "status-reject";
+            default:
+                return "";
+        }
+    }
+}
 
 <h2>AppliedJobs</h2>
 
 <p>
-    @Html.ActionLink("Apply ", "Jobs")
+    @Html.ActionLink("Apply", "Jobs")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.JobId)
-        </th>
-        <th>
-            Applied date
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.JobId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApplicationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-    </tr>
-}
-
-</table>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="@Url.Action("JobDetails", new {id=item.JobId})" class="job-link">@item.JobTitle</a> </h5>
+                    <p class="card-text">Applied Date: @item.ApplicationDate.ToString("yyyy-MM-dd")</p>
+                    <p class="card-text @GetStatusClass(item.Status)">Status: @item.Status</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -2,25 +2,14 @@
 
 @{
     ViewBag.Title = "Job Details";
-    Layout = "~/Views/Shared/JobSeekerLayout.cshtml";
+    Layout = "~/Views/Shared/EmployerLayout.cshtml";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="container-fluid  mt-5">
-    <div class="row">
+<div class="container-fluid">
+    <div class="row mt-2">
         <div class="col-md-9">
             <h2>Job details</h2>
-            <button id="Save" class="btn btn-link">
-                @if (ViewBag.isSaved)
-                {
-                    <i class="fa fa-bookmark fa-lg"></i>
-                }
-                else
-                {
-                    <i class="fa fa-bookmark-o fa-lg"></i>
-                }
-            </button>
-
             <div class="row">
                 <div class="col-md-2">
                     <i class="fa fa-eye"></i> Views
@@ -82,23 +71,12 @@
                     @Html.DisplayFor(model => model.ApplicationDeadline)
                 </dd>
             </dl>
-            @if (ViewBag.isApplied)
-            {
-                <button class="btn btn-success btn-rounded" disabled>Applied</button>
-            }
-            else
-            {
-                <a href="@Url.Action("ApplyJob", "JobSeeker", new { id =Model.JobID })">
-                    <button class="btn btn-primary btn-rounded">Apply</button>
-                </a>
-            }
         </div>
         <div class="col-md-3 mt-4">
             <div class="card">
                 <div class="card-body text-center">
                     <img alt="companylogo" src="data:jpg/png;base64 ,@Convert.ToBase64String(Model.CompanyLogo)" class="rounded-circle mb-2" width="60px" />
                     <h3 class="title"><i class="fa fa-building"></i> @Html.DisplayFor(model => model.CompanyName)</h3>
-                    <a href="@Url.Action("SendMessage", "JobSeeker", new {id=Model.EmployerID})" class="chat-link">Send message</a>
                 </div>
                 <div class="card-body">
                     <dl class="dl-horizontal">
@@ -132,29 +110,3 @@
         </div>
     </div>
 </div>
-<script src="~/Scripts/jquery-3.7.1.min.js"></script>
-<script>
-    $(document).ready(function () {
-            var jobId = @Model.JobID;
-            var url = "/JobSeeker/ViewJob/" + jobId;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (data) {
-                    console.log('Done');
-                }
-
-            });
-             $("#Save").click(function () {
-            var url = "/JobSeeker/Bookmark/" + jobId;
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (data, xhr) {
-                        console.log('Done:');
-                    }
-                });
-                 window.location.reload();
-            });
-    });
-</script>

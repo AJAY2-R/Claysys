@@ -14,13 +14,19 @@
 <body>
     <navbar>
         <div class="cus-navbar-logo">
-            <img src="~/Content/Static/claysys-logo.png">
+            <a href="/Admin"><img src="~/Content/Static/claysys-logo.png"></a>
         </div>
         <div class="cus-navbar">
             <a href="@Url.Action("Jobs","Admin")">Jobs</a>
             <a href="@Url.Action("Employers","Admin")">Employers </a>
             <a href="@Url.Action("JobSeekers","Admin")">Job Seekers</a>
-            <a href="@Url.Action("ChangePassword","Admin")">Change Password</a>
+            <div class="cus-dropdown">
+                <button class="cus-dropbtn"><img src="~/Content/Static/360_FF.jpg" class="rounded-circle" height="40px"/></button>
+                <div class="cus-dropdown-content">
+                    <a href="@Url.Action("ChangePassword","Admin")">Change Password</a>
+                    <a href="@Url.Action("Logout","Admin")">Logout</a>
+                </div>
+            </div>
         </div>
     </navbar>
 
@@ -29,6 +35,7 @@
         if (!String.IsNullOrEmpty(message))
         {
             <script>alert('@message') </script>
+
         }
     }
 
@@ -43,7 +50,7 @@
                 <svg class="bi me-2" width="40" height="32"><img src="~/Content/Static/claysys-logo.png"></svg>
 
             </a>
-            <p class="bi me-2">Connect with us</p>
+            
         </div>
         <div class="col">
 

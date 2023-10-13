@@ -2,6 +2,7 @@
 using JobPortal.Repository;
 using Microsoft.Ajax.Utilities;
 using System;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,8 +14,16 @@ namespace JobPortal.Controllers
         EmployerRepository emp = new EmployerRepository();
         public ActionResult Index()
         {
-            var Employer = emp.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"]));
-            return View(Employer);
+            try
+            {
+                PublicRepository repo = new PublicRepository();
+                var vacency = repo.GetJobDetails().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
+                return View(vacency);
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
         }
         /// <summary>
         /// Add job vacancy
@@ -86,8 +95,55 @@ namespace JobPortal.Controllers
             try
             {
                 PublicRepository repo = new PublicRepository();
-                var vacency = repo.GetJobVacancies().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
+                var vacency = repo.GetJobDetails().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
                 return View(vacency);
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Get details of the jobs
+        /// </summary>
+        /// <param name="id">Job id</param>
+        /// <returns></returns>
+        public ActionResult JobDetails(int id)
+        {
+            PublicRepository publicRepository = new PublicRepository();
+            var jobDetails = publicRepository.GetJobDetails().Find(model => model.JobID == id);
+            return View(jobDetails);
+
+        }
+        /// <summary>
+        /// Update vacancy details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult UpdateVacancy(int id)
+        {
+            PublicRepository repo = new PublicRepository();
+            var jobDetails= repo.GetJobDetails().Find(job=>job.JobID == id);
+            var categories = repo.DisplayCategories();
+
+            var viewModel = new VacancyViewModel
+            {
+                JobVacancies = jobDetails,
+                Categories = categories
+            };
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        public ActionResult UpdateVacancy(JobVacancy jobVacancy)
+        {
+            try
+            {
+                EmployerRepository employerRepository = new EmployerRepository();
+                if (employerRepository.UpdateJobVacancy(jobVacancy))
+                {
+                    TempData["Message"] = "Updated";
+                }
+                return RedirectToAction("Vacancies");
             }catch(Exception ex)
             {
                 return View(ex.Message);
@@ -178,17 +234,20 @@ namespace JobPortal.Controllers
         /// <summary>
         /// View applicant details
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Job seeker id</param>
         /// <returns></returns>
         public ActionResult JobSeekerProfile(int id)
         {
             JobSeekerRepository seeker = new JobSeekerRepository();
+            PublicRepository repo = new PublicRepository();
             var jobSeeker = seeker.JobSeekers().Find(model => model.SeekerId == id);
             var edu = seeker.GetEducationDetails(id);
+            var userSkills = repo.JobSeekerSkills(id);
             var viewModel = new JobSeekerProfile
             {
                 JobSeekerDetails = jobSeeker,
-                EducationDetails = edu
+                EducationDetails = edu,
+                Skills = userSkills
             };
             return View(viewModel);
         }
@@ -216,6 +275,66 @@ namespace JobPortal.Controllers
                     return View();
                 }
                 return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Send message
+        /// </summary>
+        /// <param name="id">Seeker id</param>
+        /// <returns></returns>
+        public ActionResult SendMessage(int id)
+        {
+            PublicRepository publicRepository = new PublicRepository();
+            int employerId =(int)Session["EmployerId"];
+            var chats = publicRepository.ReadMessage(id,employerId);
+            if (chats.Count == 0)
+            {
+                JobSeekerRepository seeker = new JobSeekerRepository();
+                var jobSeeker = seeker.JobSeekers().Find(model => model.SeekerId == id);
+                return View("Send-Message", jobSeeker);
+            }
+            return View(chats);
+        }
+        /// <summary>
+        /// Send message
+        /// </summary>
+        /// <param name="id">Seeker id</param>
+        /// <param name="message">Message</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult SendMessage(int id, string message)
+        {
+            try
+            {
+                PublicRepository publicRepository = new PublicRepository();
+                int  employerId= (int)Session["EmployerId"];
+                char sender = 'E';
+                if (publicRepository.SendMessage( id,employerId, message, sender))
+                {
+                    return new HttpStatusCodeResult(200);
+                }
+                return new HttpStatusCodeResult(400);
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult(500);
+            }
+        }
+        /// <summary>
+        /// Chat list of the Employer
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ChatList()
+        {
+            try
+            {
+                EmployerRepository employerRepository = new EmployerRepository();
+                int employerId = (int)Session["EmployerId"];
+                return View(employerRepository.ChatList(employerId));
             }
             catch (Exception ex)
             {

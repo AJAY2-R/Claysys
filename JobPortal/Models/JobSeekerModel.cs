@@ -89,12 +89,14 @@ namespace JobPortal.Models
     /// <summary>
     /// Job seeker skills model
     /// </summary>
-    public class SeekerSkills
+    public class JobSeekerSkills
     {
         [Key]
-        public int JobSeekerSkillID { get; set;}
+        public int JobSeekerSkillId { get; set;}
         public int SeekerId { get; set;}
-        public int SkillId { get; set;}
+        public string SkillName { get; set;}
+        public int SkillId { get; set; }
+
     }
     /// <summary>
     /// Job Application Model - Job applications applied by the user
@@ -107,13 +109,22 @@ namespace JobPortal.Models
         public int JobId { get; set; }
         public DateTime ApplicationDate { get; set; }
         public string Status { get; set; }
+        public string JobTitle { get; set; }
+        public string SeekerName { get; set; }
     }
+    /// <summary>
+    /// Show job seeker profile
+    /// </summary>
     public class JobSeekerProfile
     {
         public JobSeekerModel JobSeekerDetails { get; set; }
         public List<EducationDetails> EducationDetails { get; set; }
+        public List <JobSeekerSkills> Skills { get; set; }
+        public List<Skills> AllSkills { get; set; }
     }
-
+    /// <summary>
+    /// Job details model
+    /// </summary>
     public class JobDetails
     {
         public int JobID { get; set; }
@@ -149,12 +160,49 @@ namespace JobPortal.Models
         public int SeekerId { get; set; }
         public DateTime ViewDate { get; set; }
     }
-
+    /// <summary>
+    /// Bookmark model
+    /// </summary>
     public class Bookmark
     {
         [Key]
         public int BookmarkId { get; set; }
         public int JobId { get; set; }
         public int SeekerId { get; set; }
+        public string JobTitle { get; set; }
+    }
+    /// <summary>
+    /// View model for front page
+    /// </summary>
+    public class Index
+    {
+        public List<JobDetails> JobDetails { get; set; }
+        public List<JobApplication> JobApplications { get; set; }
+    }
+    /// <summary>
+    /// Chat message model
+    /// </summary>
+    public class ChatMessage
+    {
+        public int SeekerID { get; set; }
+        public int EmployerID { get; set; }
+        public int ChatID { get; set; }
+        public int MessageId { get; set; }
+        public string Message { get; set; }
+        public string SeekerName { get; set; }
+        public string CompanyName { get; set; }
+        public DateTime DateAndTime { get; set; }
+        public char Sender { get; set; }
+    }
+    /// <summary>
+    /// Chat list
+    /// </summary>
+    public class ChatList
+    {
+        public int ChatID { get; set; }
+        public int SeekerID { get; set; }
+        public int EmployerID { get; set; }
+        public string SeekerName { get; set; }
+        public string CompanyName { get; set; }
     }
 }

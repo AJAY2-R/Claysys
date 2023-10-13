@@ -4,96 +4,73 @@
     ViewBag.Title = "ViewProfile";
     Layout = "~/Views/Shared/EmployerLayout.cshtml";
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <img src="data:jpg/image;base64,@Convert.ToBase64String(Model.CompanyLogo)" alt="Company Logo" class="img-fluid rounded-circle" />
+            <h4>@Model.CompanyName</h4>
+            <h6>@Model.Username</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-2">
+                <h4>Company information</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt><i class="fas fa-building"></i> Company Name</dt>
+                    <dd>@Html.DisplayFor(model => model.CompanyName)</dd>
 
-<h2>ViewProfile</h2>
+                    <dt><i class="fas fa-envelope"></i> Official Email</dt>
+                    <dd>@Html.DisplayFor(model => model.OfficialEmail)</dd>
 
-<div>
-    <h4>EmployerModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CompanyName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CompanyName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.OfficialEmail)
-        </dt>
+                    <dt><i class="fas fa-globe"></i> Website</dt>
+                    <dd>@Html.DisplayFor(model => model.Website)</dd>
+                </dl>
+            </div>
+            <div class="card mt-2 p-2">
+                <p>
+                    <a href="@Url.Action("UpdateProfile", "Employer", new { id = @Model.EmployerID })" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("ChangePassword", "Employer")" class="btn btn-secondary ml-2">
+                        <i class="fas fa-key"></i> Change Password
+                    </a>
+                </p>
+            </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.OfficialEmail)
-        </dd>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-2">
+                <h4>Employer information</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt><i class="fas fa-user"></i> Name</dt>
+                    <dd>@Html.DisplayFor(model => model.Name)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+                    <dt><i class="fas fa-user-tie"></i> Designation</dt>
+                    <dd>@Html.DisplayFor(model => model.Designation)</dd>
+                    <dt><i class="fas fa-envelope"></i> Email</dt>
+                    <dd>@Html.DisplayFor(model => model.Email)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ContactPhone)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ContactPhone)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Website)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Website)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Designation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Designation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <img src="data:jpg/image;base64,@Convert.ToBase64String(Model.CompanyLogo)" alt="Student Image" class="card" />
-    </dl>
+                    <dt><i class="fas fa-phone"></i> Contact Phone</dt>
+                    <dd>@Html.DisplayFor(model => model.ContactPhone)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "UpdateProfile","Employer" )
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<script>
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null;
+    }
+</script>
+
+
