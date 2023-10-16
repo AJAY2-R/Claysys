@@ -70,9 +70,11 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Updated";
                 }
                 return RedirectToAction("JobSeekerProfile");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
 
         }
@@ -102,8 +104,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Message"] = ex.Message;
-                return View();
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
 
@@ -118,11 +120,13 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Resume Updated";
                 }
                return RedirectToAction("JobSeekerProfile");
-            }catch(Exception ex)
-            {
-                return View(ex.Message);
             }
-           
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
+            }
+
         }
         public ActionResult UpdateEducationDetails(int id)
         {
@@ -145,9 +149,11 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Updated Successfully";
                 }
                 return RedirectToAction("JobSeekerProfile");
-            }catch(Exception ex) {
-                return View(ex.Message);
-
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -165,9 +171,11 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Deleted Successfully ";
                 }
                 return RedirectToAction("JobSeekerProfile");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -185,9 +193,11 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Deleted Successullly";
                 }
                 return RedirectToAction("JobSeekerProfile");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -205,7 +215,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
 
         }
@@ -230,7 +241,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
 
@@ -255,9 +267,10 @@ namespace JobPortal.Controllers
                 }
                 return Redirect(Request.UrlReferrer.ToString());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -310,7 +323,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
 
@@ -381,7 +395,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         public ActionResult AddSkill()
@@ -396,19 +411,21 @@ namespace JobPortal.Controllers
         [HttpPost]
         public ActionResult AddSkill(int[] SkillId)
         {
-            JobSeekerRepository repo = new JobSeekerRepository();
+            JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
             try {
                 foreach (int skillId in SkillId)
                 {
-                    if (repo.AddSkill(skillId, Convert.ToInt32(Session["SeekerId"])))
+                    if (jobSeekerRepository.AddSkill(skillId, Convert.ToInt32(Session["SeekerId"])))
                     {
                         TempData["Message"] = "Skills added";
                     }
                 }                              
                 return RedirectToAction("JobSeekerProfile");
             }
-            catch (Exception ex) {
-                return View(ex.Message);      
+            catch (Exception ex)
+            {
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -417,8 +434,8 @@ namespace JobPortal.Controllers
         /// <returns></returns>
         public ActionResult Bookmarks()
         {
-            JobSeekerRepository repo = new JobSeekerRepository();
-            var bookmarks = repo.GetBookmarks(Convert.ToInt32(Session["SeekerId"]));
+            JobSeekerRepository jobSeekerRepository = new JobSeekerRepository();
+            var bookmarks = jobSeekerRepository.GetBookmarks(Convert.ToInt32(Session["SeekerId"]));
             return View(bookmarks);
         }
         /// <summary>
@@ -478,6 +495,18 @@ namespace JobPortal.Controllers
             {
                 return View(ex.Message);
             }
+        }
+        /// <summary>
+        /// Logout Employer
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Logout()
+        {
+            Session["SeekerId"] = null;
+            Session["SeekerImage"] = null;
+            Session["SeekerUsername"] = null;
+            TempData["Message"] = "Logouted";
+            return RedirectToAction("Index", "Home");
         }
     }
 }

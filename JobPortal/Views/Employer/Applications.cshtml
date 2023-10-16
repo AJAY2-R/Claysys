@@ -62,10 +62,7 @@
                     url: url,
                     type: 'GET',
                     success: function (data) {
-                        console.log('HTTP Status Code:', xhr.status);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.error('Error:', textStatus, errorThrown);
+                        console.log('Read');
                     }
                 });
                 window.location.href = e.target.href;

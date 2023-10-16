@@ -19,26 +19,42 @@
             @Html.ActionLink("Home", "Index", "JobSeeker")
             @Html.ActionLink("Jobs", "Jobs", "JobSeeker")
             @Html.ActionLink("Applied Jobs", "AppliedJobs", "JobSeeker")
-            @Html.ActionLink("Messages","ChatList","JobSeeker")
+            @Html.ActionLink("Messages", "ChatList", "JobSeeker")
             <div class="cus-dropdown">
-                <button class="cus-dropbtn"><img src="data:png/jpg; base64,@Session["SeekerImage"]" class="rounded-circle" width="50px" height="50px"/></button>
+                <button class="cus-dropbtn"><img src="data:png/jpg; base64,@Session["SeekerImage"]" class="rounded-circle" width="50px" height="50px" /></button>
                 <div class="cus-dropdown-content">
                     <a href="@Url.Action("JobSeekerProfile","JobSeeker")">Profile</a>
                     <a href="@Url.Action("Bookmarks","JobSeeker")">Saved jobs</a>
-                    <a href="@Url.Action("Index","Home")">Logout</a>
+                    <a href="@Url.Action("Logout","JobSeeker")">Logout</a>
                 </div>
             </div>
         </div>
-</navbar>
+    </navbar>
 
     @{
         string message = TempData["Message"] as string;
         if (!String.IsNullOrEmpty(message))
         {
-            <script>alert('@message') </script>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> @message
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <script>
+                function preventBack() {
+                    window.history.forward();
+                }
+
+                setTimeout(preventBack, 0);
+
+                window.onunload = function () {
+                    null;
+                };
+            </script>
         }
     }
-
     <div class="container body-content">
         @RenderBody()
     </div>

@@ -15,7 +15,7 @@
                                 <div class="character-picture">@Model.First().SeekerName[0]</div>
                             </div>
                             <div class="col-md-11 mt-2">
-                                <h4>@Model.First().SeekerName</h4>
+                                <h4><a href="@Url.Action("JobSeekerProfile","Employer",new {id=Model.First().SeekerID})" class="msg-profile">@Model.First().SeekerName</a></h4>
                             </div>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                                         <div class="message-con">
                                             <div class="upper-text">@message.SeekerName</div>
                                             <div class="message-container">
-                                                <div class="message">@message.Message</div>
+                                                <div class="message">@Html.Raw(message.Message.Replace(Environment.NewLine, "<br />"))</div>
                                             </div>
                                             <div class="lower-tex">@message.DateAndTime</div>
                                         </div>
@@ -48,7 +48,7 @@
                                         <div class="message-con text-right">
                                             <div class="upper-text">You</div>
                                             <div class="message-container">
-                                                <div class="message">@message.Message</div>
+                                                <div class="message">@Html.Raw(message.Message.Replace(Environment.NewLine, "<br />"))</div>
                                             </div>
                                             <div class="lower-tex">@message.DateAndTime</div>
                                         </div>

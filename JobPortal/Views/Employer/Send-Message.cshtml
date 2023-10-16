@@ -15,7 +15,7 @@
                                 <div class="character-picture">@Model.FirstName[0]</div>
                             </div>
                             <div class="col-md-11 mt-2">
-                                <h4>@Model.FirstName</h4>
+                                <h4><a href="@Url.Action("JobSeekerProfile","Employer",new {id=Model.SeekerId})" class="msg-profile">@Model.FirstName</a></h4>
                             </div>
                         </div>
                     </div>

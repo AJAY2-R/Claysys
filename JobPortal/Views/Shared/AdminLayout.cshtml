@@ -21,7 +21,7 @@
             <a href="@Url.Action("Employers","Admin")">Employers </a>
             <a href="@Url.Action("JobSeekers","Admin")">Job Seekers</a>
             <div class="cus-dropdown">
-                <button class="cus-dropbtn"><img src="~/Content/Static/360_FF.jpg" class="rounded-circle" height="40px"/></button>
+                <button class="cus-dropbtn"><img src="~/Content/Static/360_FF.jpg" class="rounded-circle" height="40px" /></button>
                 <div class="cus-dropdown-content">
                     <a href="@Url.Action("ChangePassword","Admin")">Change Password</a>
                     <a href="@Url.Action("Logout","Admin")">Logout</a>
@@ -34,8 +34,24 @@
         string message = TempData["Message"] as string;
         if (!String.IsNullOrEmpty(message))
         {
-            <script>alert('@message') </script>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success!</strong> @message
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
+            <script>
+                function preventBack() {
+                    window.history.forward();
+                }
+
+                setTimeout(preventBack, 0);
+
+                window.onunload = function () {
+                    null;
+                };
+            </script>
         }
     }
 
@@ -50,7 +66,7 @@
                 <svg class="bi me-2" width="40" height="32"><img src="~/Content/Static/claysys-logo.png"></svg>
 
             </a>
-            
+
         </div>
         <div class="col">
 

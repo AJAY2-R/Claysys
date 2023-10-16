@@ -63,17 +63,30 @@
             <h4>Recently applied</h4>
             @{
                 var applications = Model.JobApplications.Take(3);
-                foreach (var item in applications)
+                if (!applications.Any())
                 {
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="@Url.Action("JobDetails", new {id=item.JobId})" class="job-link">@item.JobTitle</a> </h5>
-                                <p class="card-text">Applied Date: @item.ApplicationDate.ToString("yyyy-MM-dd")</p>
-                                <p class="card-text @GetStatusClass(item.Status)">Status: @item.Status</p>
+                    <text><div class="col-md-10">
+                            <h6>No jobs applied</h6>
+
+                        </div>
+                        <hr />
+                    </text>
+                }
+                else
+                {
+                    foreach (var item in applications)
+                    {
+
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="@Url.Action("JobDetails", new { id = item.JobId })" class="job-link">@item.JobTitle</a> </h5>
+                                    <p class="card-text">Applied Date: @item.ApplicationDate.ToString("yyyy-MM-dd")</p>
+                                    <p class="card-text @GetStatusClass(item.Status)">Status: @item.Status</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
             }
         </div>
@@ -82,30 +95,33 @@
             <div class="col-md-12">
                 @foreach (var item in Model.JobDetails.Take(3))
                 {
-                    <div class="row mt-2">
-                        <div class="card p-2">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <img alt="CompanyLogo" src="data:jpg/png;base64,@Convert.ToBase64String(item.CompanyLogo)" class="rounded" width=60px height=60px />
-                                    </div>
-                                    <div class="col-md-10">
-                                        <h3>@item.JobTitle</h3>
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-10 ">
-                                            <p class="reduce-line-spacing text-muted"><i class="fa fa-building-o"></i> @item.CompanyName</p>
-                                            <p class="reduce-line-spacing text-muted"><i class="fa fa-briefcase"></i> @item.CategoryName ,  <i class="fa fa-map-marker"></i> @item.Location</p>
-                                            <p class="reduce-line-spacing text-muted"><i class="fa fa-money"></i> @item.Salary</p>
+                    if (item.IsPublished && item.ApplicationDeadline >= DateTime.Now)
+                    {
+                        <div class="row mt-2">
+                            <div class="card p-2">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img alt="CompanyLogo" src="data:jpg/png;base64,@Convert.ToBase64String(item.CompanyLogo)" class="rounded" width=60px height=60px />
+                                        </div>
+                                        <div class="col-md-10">
+                                            <h3>@item.JobTitle</h3>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-10 ">
+                                                <p class="reduce-line-spacing text-muted"><i class="fa fa-building-o"></i> @item.CompanyName</p>
+                                                <p class="reduce-line-spacing text-muted"><i class="fa fa-briefcase"></i> @item.CategoryName ,  <i class="fa fa-map-marker"></i> @item.Location</p>
+                                                <p class="reduce-line-spacing text-muted"><i class="fa fa-money"></i> @item.Salary</p>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div style="text-align: right;">
-                                @Html.ActionLink("Details", "JobDetails", new { id = item.JobID }, new { @class = "btn btn-outline-primary" })
+                                <div style="text-align: right;">
+                                    @Html.ActionLink("Details", "JobDetails", new { id = item.JobID }, new { @class = "btn btn-outline-primary" })
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
                 <br />
                 @Html.ActionLink("View More", "Jobs", null, new { @class = "skill", style = "text-decoration:none" })
@@ -114,3 +130,14 @@
     </div>
 
 </div>
+<script>
+     function preventBack() {
+         window.history.forward();
+     }
+
+     setTimeout(preventBack, 0);
+
+     window.onunload = function () {
+         null;
+     };
+</script>

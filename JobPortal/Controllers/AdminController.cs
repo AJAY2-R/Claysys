@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using JobPortal.Models;
 using JobPortal.Repository;
+using Microsoft.Ajax.Utilities;
 
 namespace JobPortal.Controllers
 {
@@ -521,6 +522,11 @@ namespace JobPortal.Controllers
                 Skills = userSkills
             };
             return View(viewModel);
+        }
+        public ActionResult ContactMessages()
+        {
+            PublicRepository publicRepository = new PublicRepository(); 
+            return View(publicRepository.DisplayContactMessages());
         }
         public ActionResult Logout()
         {

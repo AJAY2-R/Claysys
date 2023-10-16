@@ -13,7 +13,7 @@
 <body>
     <navbar>
         <div class="cus-navbar-logo">
-           <a href="/" ><img src="~/Content/Static/claysys-logo.png"></a>
+            <a href="/"><img src="~/Content/Static/claysys-logo.png"></a>
         </div>
         <div class="cus-navbar">
 
@@ -25,14 +25,31 @@
             <a href="@Url.Action("About","Home")">About us</a>
             <a href="@Url.Action("ContactUs","Home")">Contact us</a>
         </div>
-       
+
     </navbar>
 
     @{
         string message = TempData["Message"] as string;
         if (!String.IsNullOrEmpty(message))
         {
-            <script>alert('@message') </script>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong> @message</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <script>
+                function preventBack() {
+                    window.history.forward();
+                }
+
+                setTimeout(preventBack, 0);
+
+                window.onunload = function () {
+                    null;
+                };
+            </script>
         }
     }
 

@@ -33,7 +33,7 @@
                                         <div class="message-con">
                                             <div class="upper-text">@message.CompanyName</div>
                                             <div class="message-container">
-                                                <div class="message">@message.Message</div>
+                                                <div class="message">@Html.Raw(message.Message.Replace(Environment.NewLine, "<br />"))</div>
                                             </div>
                                             <div class="lower-tex">@message.DateAndTime</div>
                                         </div>
@@ -48,7 +48,7 @@
                                         <div class="message-con text-right">
                                             <div class="upper-text">You</div>
                                             <div class="message-container">
-                                                <div class="message">@message.Message</div>
+                                                <div class="message">@Html.Raw(message.Message.Replace(Environment.NewLine, "<br />"))</div>
                                             </div>
                                             <div class="lower-tex">@message.DateAndTime</div>
                                         </div>

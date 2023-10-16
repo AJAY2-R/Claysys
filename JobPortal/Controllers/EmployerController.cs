@@ -16,13 +16,14 @@ namespace JobPortal.Controllers
         {
             try
             {
-                PublicRepository repo = new PublicRepository();
-                var vacency = repo.GetJobDetails().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
+                PublicRepository publicRespository = new PublicRepository();
+                var vacency = publicRespository.GetJobDetails().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
                 return View(vacency);
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -31,8 +32,8 @@ namespace JobPortal.Controllers
         /// <returns></returns>
         public ActionResult AddJobVacancy()
         {
-            PublicRepository repo = new PublicRepository();
-            var categories = repo.DisplayCategories();
+            PublicRepository publicRespository = new PublicRepository();
+            var categories = publicRespository.DisplayCategories();
             return View(categories);
         }
         [HttpPost]
@@ -41,8 +42,8 @@ namespace JobPortal.Controllers
             try
             {
                 int employerId = Convert.ToInt32(Session["EmployerId"]);
-                EmployerRepository repo = new EmployerRepository();
-                if (repo.AddJobVacancy(obj, employerId))
+                EmployerRepository employerRepository = new EmployerRepository();
+                if (employerRepository.AddJobVacancy(obj, employerId))
                 {
                     TempData["Message"] = "Job vaccency published....";
                     return RedirectToAction("Index");
@@ -51,7 +52,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -60,13 +62,13 @@ namespace JobPortal.Controllers
         /// <returns></returns>
         public ActionResult ViewProfile()
         {
-            EmployerRepository repo = new EmployerRepository();
-            return View(repo.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
+            EmployerRepository employerRepository = new EmployerRepository();
+            return View(employerRepository.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
         }
         public ActionResult UpdateProfile()
         {
-            EmployerRepository repo = new EmployerRepository();
-            return View(repo.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
+            EmployerRepository employerRepository = new EmployerRepository();
+            return View(employerRepository.Employers().Find(model => model.EmployerID == Convert.ToInt32(Session["EmployerId"])));
         }
 
         [HttpPost]
@@ -74,16 +76,17 @@ namespace JobPortal.Controllers
         {
             try
             {
-                EmployerRepository repo = new EmployerRepository();
-                if(repo.UpdateEmployer(employer, uploadedLogo, Convert.ToInt32(Session["EmployerId"])))
+                EmployerRepository employerRepository = new EmployerRepository();
+                if(employerRepository.UpdateEmployer(employer, uploadedLogo, Convert.ToInt32(Session["EmployerId"])))
                 {
                     TempData["Message"] = "Updated";
                 }
                 return RedirectToAction("ViewProfile");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -97,9 +100,11 @@ namespace JobPortal.Controllers
                 PublicRepository repo = new PublicRepository();
                 var vacency = repo.GetJobDetails().Where(emp => emp.EmployerID == Convert.ToInt32(Session["EmployerId"]));
                 return View(vacency);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -144,9 +149,11 @@ namespace JobPortal.Controllers
                     TempData["Message"] = "Updated";
                 }
                 return RedirectToAction("Vacancies");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -161,9 +168,11 @@ namespace JobPortal.Controllers
             {
                 EmployerRepository repo = new EmployerRepository();
                 return View(repo.GetJobApplications(id));
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -183,9 +192,10 @@ namespace JobPortal.Controllers
                 }
                 return RedirectToAction("Applications",new {id = aid});
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -207,7 +217,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -278,7 +289,8 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
         }
         /// <summary>
@@ -338,8 +350,23 @@ namespace JobPortal.Controllers
             }
             catch (Exception ex)
             {
-                return View(ex.Message);
+                ExceptionLogging.SendErrorToText(ex);
+                return View("Error");
             }
+        }
+        /// <summary>
+        /// Logout employer
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Logout()
+        {
+            Session["EmployrId"] = null;
+            Session["CompanyLogo"] = null; 
+            Session["EmployerUsername"] = null;
+            TempData["Message"] = "Logouted";
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

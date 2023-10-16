@@ -353,6 +353,66 @@ namespace JobPortal.Repository
             }
             finally { con.Close(); }
         }
+        /// <summary>
+        /// Create contact us message
+        /// </summary>
+        /// <param name="contactMessage"></param>
+        /// <returns></returns>
+        public bool CreateContactMessage(ContactMessage contactMessage)
+        {
+            try
+            {
+                connection();
+                SqlCommand com = new SqlCommand("SP_CreateContactUsMessage", con);
+                com.CommandType = CommandType.StoredProcedure;
+                con.Open();
+                com.Parameters.AddWithValue("@FirstName", contactMessage.FirstName);
+                com.Parameters.AddWithValue("@LastName", contactMessage.LastName);
+                com.Parameters.AddWithValue("@PhoneNumber", contactMessage.PhoneNumber);
+                com.Parameters.AddWithValue("@Email", contactMessage.Email);
+                com.Parameters.AddWithValue("@Message", contactMessage.Message);
+                com.Parameters.AddWithValue("@DateTime", DateTime.Now);
+                int i = com.ExecuteNonQuery();
+                return i > 0;
+            }
+            finally { con.Close(); }
+        }
+
+        /// <summary>
+        /// Display a contact message
+        /// </summary>
+        /// <returns></returns>
+        public List<ContactMessage> DisplayContactMessages()
+        {
+            List<ContactMessage> contactMessages = new List<ContactMessage>();
+            try
+            {
+                connection();
+                SqlCommand cmd = new SqlCommand("SP_ReadContactUsMessages", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    var contactMessage = new ContactMessage
+                    {
+                        ContactId = Convert.ToInt32(dr["ContactId"]),
+                        FirstName = Convert.ToString(dr["FirstName"]),
+                        LastName = Convert.ToString(dr["LastName"]),
+                        PhoneNumber = Convert.ToString(dr["PhoneNumber"]),
+                        Email = Convert.ToString(dr["Email"]),
+                        Message = Convert.ToString(dr["Message"]),
+                        DateTime = Convert.ToDateTime(dr["DateTime"])
+                    };
+                    contactMessages.Add(contactMessage);
+                }
+                return contactMessages;
+            }
+            finally { con.Close(); }
+        }
+
     }
 
 }
